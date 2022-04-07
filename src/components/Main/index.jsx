@@ -1,4 +1,3 @@
-import { height, width } from "@mui/system";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Grid from "../Grid";
 import Sidebar from "../Sidebar";
@@ -11,7 +10,6 @@ export default function Main() {
 
 	const mainRef = useRef(null);
 	const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-	// const [gridDimensions, setGridDimensions] = useState({ cols: 0, rows: 0 });
 	const [gridProps, setGridProps] = useState({
 		cols: 0,
 		rows: 0,
@@ -21,8 +19,6 @@ export default function Main() {
 	const updateGrid = () => {
 		const cols = Math.floor(dimensions.width / appState.size);
 		const rows = Math.floor(dimensions.height / appState.size);
-		console.log(cols, rows, cols * rows, "aaaaaaaa");
-		// setGridDimensions({ cols, rows });
 		setGridProps({
 			cols,
 			rows,
@@ -39,7 +35,6 @@ export default function Main() {
 			updateGrid();
 		};
 		if (mainRef.current) {
-			console.log(dimensions);
 			setDimensions({
 				width: mainRef.current.clientWidth,
 				height: mainRef.current.clientHeight,
@@ -53,6 +48,7 @@ export default function Main() {
 
 	useEffect(() => {
 		updateGrid();
+		console.log(window);
 	}, [appState.size]);
 
 	return (

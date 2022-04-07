@@ -3,8 +3,6 @@ import StyledSidebar from "./Sidebar.styled";
 import Slider from "@mui/material/Slider";
 
 export default function Sidebar({ size, setAppState }) {
-	const [localSize, setLocalSize] = useState(size);
-
 	const handleChange = (e) => {
 		setAppState((prevState) => ({
 			...prevState,

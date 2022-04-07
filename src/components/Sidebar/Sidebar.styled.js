@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 const StyledSidebar = styled.div`
-	width: 18vw;
+	width: 15rem !important;
+	flex-shrink: 0;
 	background: ${(props) => props.theme.colors.primary};
 	color: ${(props) => props.theme.colors.accent};
 	padding: 2rem;
