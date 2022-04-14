@@ -35,20 +35,20 @@ export default function useAlgo(mainRef) {
 		const nodeX = Math.floor((x - gridStart.left) / size);
 		const nodeY = Math.floor((y - gridStart.top) / size);
 		return cols * nodeY + nodeX >= elements.length ||
-			cols * nodeY + nodeX < 0
+			cols * nodeY + nodeX < 0 ||
+			x <= gridStart.left ||
+			y <= gridStart.top
 			? null
 			: cols * nodeY + nodeX;
 	};
 	const bind = useDrag(({ canceled, buttons, cancel, down, xy: [x, y] }) => {
-		// console.log("aaa", down, buttons, getIdxFromCoords(x, y));
 		if (
 			x < 0 ||
 			y < 0 ||
 			canceled ||
 			visualizationOngoing ||
-			buttons <= 0
+			buttons === 0
 		) {
-			// console.log("bbb", down, buttons, getIdxFromCoords(x, y));
 			setPaintNodes(null);
 			cancel();
 			return;
@@ -74,8 +74,6 @@ export default function useAlgo(mainRef) {
 		if (!down) setPaintNodes(null);
 
 		if (currentNode === null || currentNode >= elements.length) {
-			setPaintNodes(null);
-			cancel();
 			return;
 		}
 		if (paintNodes === "toWall" && elements[currentNode] !== "wall") {
