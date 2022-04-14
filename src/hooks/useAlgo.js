@@ -37,7 +37,9 @@ export default function useAlgo(mainRef) {
 		return cols * nodeY + nodeX >= elements.length ||
 			cols * nodeY + nodeX < 0 ||
 			x <= gridStart.left ||
-			y <= gridStart.top
+			x >= gridStart.left + cols * size ||
+			y <= gridStart.top ||
+			y >= gridStart.top + rows * size
 			? null
 			: cols * nodeY + nodeX;
 	};

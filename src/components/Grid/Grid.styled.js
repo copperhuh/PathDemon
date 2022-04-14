@@ -10,9 +10,6 @@ const StyledGrid = styled.div`
 	height: 100%;
 	.flex-container {
 		display: flex;
-		/* align-items: center; */
-		/* justify-content: center; */
-		height: ${(props) => props.gridDimensions.rows * props.size}px;
 		height: 100%;
 		width: 100%;
 	}
@@ -43,6 +40,7 @@ const StyledGrid = styled.div`
 		margin: ${(props) => (props.size * 1) / 10}px;
 		border-radius: 10%;
 		font-size: 10px;
+		transition: all 0.1s;
 	}
 	.empty {
 		background: ${(props) => props.theme.colors.light};
