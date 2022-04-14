@@ -1,41 +1,54 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import StyledSidebar from "./Sidebar.styled";
 import Slider from "@mui/material/Slider";
+import {
+	doChangeSize,
+	doSetDelayRef,
+	doSetVisualizationOngoing,
+} from "../../redux/Actions";
+import { connect } from "react-redux";
 
-export default function Sidebar({
-	size,
-	setSize,
-	appState,
-	setAppState,
-	delayRef,
+function Sidebar({
+	visualizationOngoing,
+	setVisualizationOngoing,
+	setDelayRef,
+	changeSize,
 }) {
+	const [settings, setSettings] = useState({
+		size: 50,
+		delay: 50,
+	});
+
+	const delayRef = useRef(null);
+
+	useEffect(() => {
+		setDelayRef(delayRef);
+	}, [delayRef]);
+
 	const handleChange = (e) => {
-		if (e.target.name === "size") {
-			setSize(e.target.value);
-			return;
-		}
-		setAppState((prevState) => ({
+		setSettings((prevState) => ({
 			...prevState,
 			[e.target.name]: e.target.value,
 		}));
+		if (e.target.name === "size") {
+			changeSize(e.target.value);
+		}
 	};
-	const [delay, setDelay] = useState(30);
-	const handleDelayChange = (e) => {
-		setDelay(e.target.value);
-	};
+
 	return (
 		<StyledSidebar>
 			<div className="sidebar-element">
 				GRID SIZE
 				<Slider
+					disabled={visualizationOngoing}
 					className="slider"
 					name="size"
-					defaultValue={10}
-					value={size}
+					defaultValue={30}
+					value={settings.size}
 					onChange={handleChange}
 					step={1}
 					min={10}
-					max={60}
+					max={70}
 					valueLabelDisplay="auto"
 					aria-label="size"
 				/>
@@ -46,9 +59,9 @@ export default function Sidebar({
 					ref={delayRef}
 					className="slider"
 					name="delay"
-					defaultValue={10}
-					value={delay}
-					onChange={handleDelayChange}
+					defaultValue={50}
+					value={settings.delay}
+					onChange={handleChange}
 					min={0}
 					max={500}
 					valueLabelDisplay="auto"
@@ -57,12 +70,8 @@ export default function Sidebar({
 			</div>
 			<div className="sidebar-element">
 				<button
-					onClick={() =>
-						setAppState((prevState) => ({
-							...prevState,
-							started: !prevState.started,
-						}))
-					}
+					disabled={visualizationOngoing}
+					onClick={() => setVisualizationOngoing(true)}
 				>
 					GENERATE MAZE
 				</button>
@@ -70,3 +79,16 @@ export default function Sidebar({
 		</StyledSidebar>
 	);
 }
+
+const Actions = (dispatch) => ({
+	changeSize: (size) => dispatch(doChangeSize(size)),
+	setDelayRef: (sortType) => dispatch(doSetDelayRef(sortType)),
+	setVisualizationOngoing: (visualizationOngoing) =>
+		dispatch(doSetVisualizationOngoing(visualizationOngoing)),
+});
+
+const Props = (state) => ({
+	visualizationOngoing: state.visualizationOngoing,
+});
+
+export default connect(Props, Actions)(Sidebar);

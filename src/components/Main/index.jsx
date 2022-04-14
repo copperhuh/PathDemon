@@ -1,32 +1,19 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { connect } from "react-redux";
+import { doChangeDimensions } from "../../redux/Actions";
 import Grid from "../Grid";
 import Sidebar from "../Sidebar";
 import StyledMain from "./Main.styled";
 
-export default function Main() {
-	const [size, setSize] = useState(30);
-	const [appState, setAppState] = useState({
-		delayRef: 30,
-		started: false,
-	});
-
+function Main({ size, changeDimensions }) {
 	const mainRef = useRef(null);
-	const delayRef = useRef(null);
 	const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-	const [gridProps, setGridProps] = useState({
-		cols: 0,
-		rows: 0,
-		size: size,
-	});
 
 	const updateGrid = () => {
-		const cols = Math.floor(dimensions.width / size);
-		const rows = Math.floor(dimensions.height / size);
-		setGridProps({
-			cols,
-			rows,
-			size: size,
-		});
+		changeDimensions(
+			Math.floor(dimensions.width / size),
+			Math.floor(dimensions.height / size)
+		);
 	};
 
 	useLayoutEffect(() => {
@@ -55,21 +42,18 @@ export default function Main() {
 
 	return (
 		<StyledMain>
-			<Sidebar
-				size={size}
-				setSize={setSize}
-				delayRef={delayRef}
-				appState={appState}
-				setAppState={setAppState}
-				updateGrid={updateGrid}
-			/>
-			<Grid
-				delayRef={delayRef}
-				size={gridProps.size}
-				gridDimensions={{ cols: gridProps.cols, rows: gridProps.rows }}
-				mainRef={mainRef}
-				started={appState.started}
-			/>
+			<Sidebar />
+			<Grid mainRef={mainRef} />
 		</StyledMain>
 	);
 }
+
+const Actions = (dispatch) => ({
+	changeDimensions: (cols, rows) => dispatch(doChangeDimensions(cols, rows)),
+});
+
+const Props = (state) => ({
+	size: state.size,
+});
+
+export default connect(Props, Actions)(Main);

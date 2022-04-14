@@ -1,28 +1,22 @@
 import React from "react";
+import { connect } from "react-redux";
 import useAlgo from "../../hooks/useAlgo";
 import StyledGrid from "./Grid.styled";
 
-export default function Grid({
-	size,
-	gridDimensions,
-	mainRef,
-	delayRef,
-	started,
-}) {
-	const elements = useAlgo(
-		gridDimensions.rows * gridDimensions.cols,
-		mainRef.current,
-		size,
-		gridDimensions.cols,
-		gridDimensions.rows,
-		delayRef,
-		started
-	);
+function Grid({ size, dimensions, mainRef }) {
+	const elements = useAlgo(mainRef.current);
 	return (
-		<StyledGrid size={size} gridDimensions={gridDimensions}>
+		<StyledGrid size={size} gridDimensions={dimensions}>
 			<div ref={mainRef} className="flex-container">
 				<div className="container">{elements}</div>
 			</div>
 		</StyledGrid>
 	);
 }
+
+const Props = (state) => ({
+	size: state.size,
+	dimensions: state.dimensions,
+});
+
+export default connect(Props, null)(Grid);

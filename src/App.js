@@ -2,6 +2,8 @@ import { createGlobalStyle } from "styled-components";
 import Header from "./components/Header";
 import Main from "./components/Main";
 import Theme from "./Theme";
+import { Provider } from "react-redux";
+import { store } from "./redux/Store";
 
 const GlobalStyles = createGlobalStyle`
   *{
@@ -58,9 +60,11 @@ const GlobalStyles = createGlobalStyle`
 function App() {
 	return (
 		<Theme>
-			<GlobalStyles />
-			<Header />
-			<Main />
+			<Provider store={store}>
+				<GlobalStyles />
+				<Header />
+				<Main />
+			</Provider>
 		</Theme>
 	);
 }

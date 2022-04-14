@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 import { useDrag } from "@use-gesture/react";
 import depthFirstSearchMaze from "../maze_generators/depthFirstSearchMaze";
+import { useDispatch, useSelector } from "react-redux";
+import { doSetVisualizationOngoing } from "../redux/Actions";
 
-export default function useAlgo(
-	nodeCount,
-	mainRef,
-	size,
-	cols,
-	rows,
-	delayRef,
-	started
-) {
+export default function useAlgo(mainRef) {
+	const size = useSelector((state) => state.size);
+	const cols = useSelector((state) => state.dimensions.cols);
+	const rows = useSelector((state) => state.dimensions.rows);
+	const delayRef = useSelector((state) => state.delayRef);
+	const visualizationOngoing = useSelector(
+		(state) => state.visualizationOngoing
+	);
+
+	const dispatch = useDispatch();
+
 	const [elements, setElements] = useState([]);
-	const [generator, setGenerator] = useState(null);
 	const [gridStart, setGridStart] = useState({
 		left: 0,
 		top: 0,
@@ -40,21 +43,17 @@ export default function useAlgo(
 	const getIdxFromCoords = (x, y) => {
 		const nodeX = Math.floor((x - gridStart.left) / size);
 		const nodeY = Math.floor((y - gridStart.top) / size);
-		// console.log(x, size * cols + gridStart.left);
 		return cols * nodeY + nodeX >= elements.length
 			? null
 			: cols * nodeY + nodeX;
 	};
 	const bind = useDrag(
 		({ canceled, cancel, down, xy: [x, y] }) => {
-			// console.log(gridStart.left, gridStart.top, down, "aaa");
-			// console.log(x, y, getIdxFromCoords(x, y), "ccc");
-			if (x < 0 || y < 0 || canceled) {
+			if (x < 0 || y < 0 || canceled || visualizationOngoing) {
 				cancel();
 				return;
 			}
 			const currentNode = getIdxFromCoords(x, y);
-			console.log(currentNode);
 			if (paintNodes === null) {
 				if (elements[getIdxFromCoords(x, y)] === "empty") {
 					setPaintNodes("toWall");
@@ -104,6 +103,7 @@ export default function useAlgo(
 			await sleep(parseInt(delayRef.current.textContent));
 			const out = generator.next();
 			if (out.done === true) {
+				dispatch(doSetVisualizationOngoing(false));
 				break;
 			}
 			setElements(out.value);
@@ -111,23 +111,21 @@ export default function useAlgo(
 	};
 
 	useEffect(() => {
-		if (started) {
+		if (visualizationOngoing) {
 			generate();
 		}
-	}, [started]);
-	// if (elements.length > 0) {
-	// 	generate();
-	// }
+	}, [visualizationOngoing]);
+
 	const updateElements = (nodes) =>
 		nodes.map((el, idx) => <Node look={el} idx={idx} key={idx} />);
 
 	useEffect(() => {
 		let cleanGrid = [];
-		for (let i = 0; i < nodeCount; i++) {
+		for (let i = 0; i < cols * rows; i++) {
 			cleanGrid.push("empty");
 		}
 		setElements(cleanGrid);
-	}, [nodeCount]);
+	}, [cols, rows]);
 
 	return updateElements(elements);
 }
