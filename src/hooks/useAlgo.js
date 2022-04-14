@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { useDrag } from "@use-gesture/react";
 import depthFirstSearchMaze from "../maze_generators/depthFirstSearchMaze";
 import { useDispatch, useSelector } from "react-redux";
 import { doSetVisualizationOngoing } from "../redux/Actions";
+import Node from "../components/Grid/Node";
 
 export default function useAlgo(mainRef) {
 	const size = useSelector((state) => state.size);
@@ -30,72 +31,70 @@ export default function useAlgo(mainRef) {
 
 	const [paintNodes, setPaintNodes] = useState(null);
 
-	function Node({ look, idx }) {
-		return (
-			<div className="node" {...bind()}>
-				<div
-					className={`node-coloured ${look}`}
-					style={{ touchAction: "none" }}
-				></div>
-			</div>
-		);
-	}
 	const getIdxFromCoords = (x, y) => {
 		const nodeX = Math.floor((x - gridStart.left) / size);
 		const nodeY = Math.floor((y - gridStart.top) / size);
-		return cols * nodeY + nodeX >= elements.length
+		return cols * nodeY + nodeX >= elements.length ||
+			cols * nodeY + nodeX < 0
 			? null
 			: cols * nodeY + nodeX;
 	};
-	const bind = useDrag(
-		({ canceled, cancel, down, xy: [x, y] }) => {
-			if (x < 0 || y < 0 || canceled || visualizationOngoing) {
-				cancel();
-				return;
-			}
-			const currentNode = getIdxFromCoords(x, y);
-			if (paintNodes === null) {
-				if (elements[getIdxFromCoords(x, y)] === "empty") {
-					setPaintNodes("toWall");
-					setElements((prevElements) => [
-						...prevElements.slice(0, currentNode),
-						"wall",
-						...prevElements.slice(currentNode + 1),
-					]);
-				} else {
-					setPaintNodes("toEmpty");
-					setElements((prevElements) => [
-						...prevElements.slice(0, currentNode),
-						"empty",
-						...prevElements.slice(currentNode + 1),
-					]);
-				}
-			}
-			if (!down) setPaintNodes(null);
-
-			if (currentNode === -1 && currentNode !== elements.length) {
-				cancel();
-				return;
-			}
-			if (paintNodes === "toWall" && elements[currentNode] !== "wall") {
+	const bind = useDrag(({ canceled, buttons, cancel, down, xy: [x, y] }) => {
+		// console.log("aaa", down, buttons, getIdxFromCoords(x, y));
+		if (
+			x < 0 ||
+			y < 0 ||
+			canceled ||
+			visualizationOngoing ||
+			buttons <= 0
+		) {
+			// console.log("bbb", down, buttons, getIdxFromCoords(x, y));
+			setPaintNodes(null);
+			cancel();
+			return;
+		}
+		const currentNode = getIdxFromCoords(x, y);
+		if (paintNodes === null) {
+			if (elements[getIdxFromCoords(x, y)] === "empty") {
+				setPaintNodes("toWall");
 				setElements((prevElements) => [
 					...prevElements.slice(0, currentNode),
 					"wall",
 					...prevElements.slice(currentNode + 1),
 				]);
-			} else if (
-				paintNodes === "toEmpty" &&
-				elements[currentNode] !== "empty"
-			) {
+			} else {
+				setPaintNodes("toEmpty");
 				setElements((prevElements) => [
 					...prevElements.slice(0, currentNode),
 					"empty",
 					...prevElements.slice(currentNode + 1),
 				]);
 			}
-		},
-		{ enabled: size > 20 }
-	);
+		}
+		if (!down) setPaintNodes(null);
+
+		if (currentNode === null || currentNode >= elements.length) {
+			setPaintNodes(null);
+			cancel();
+			return;
+		}
+		if (paintNodes === "toWall" && elements[currentNode] !== "wall") {
+			setElements((prevElements) => [
+				...prevElements.slice(0, currentNode),
+				"wall",
+				...prevElements.slice(currentNode + 1),
+			]);
+		} else if (
+			paintNodes === "toEmpty" &&
+			elements[currentNode] !== "empty"
+		) {
+			setElements((prevElements) => [
+				...prevElements.slice(0, currentNode),
+				"empty",
+				...prevElements.slice(currentNode + 1),
+			]);
+		}
+	}, {});
 
 	const generate = async () => {
 		const generator = depthFirstSearchMaze(elements.length, cols);
@@ -117,7 +116,9 @@ export default function useAlgo(mainRef) {
 	}, [visualizationOngoing]);
 
 	const updateElements = (nodes) =>
-		nodes.map((el, idx) => <Node look={el} idx={idx} key={idx} />);
+		nodes.map((el, idx) => (
+			<Node look={el} idx={idx} bind={{ ...bind() }} key={idx} />
+		));
 
 	useEffect(() => {
 		let cleanGrid = [];

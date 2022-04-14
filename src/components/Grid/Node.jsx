@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useMemo } from "react";
 
-export default function Node({ look }) {
-	let color;
-
-	switch (look) {
-		case "empty":
-			color = "#d4d0c1";
-			break;
-		default:
-			color = "#d4d0c1";
-	}
-
-	return <div className="node" style={{ background: color }}></div>;
+function Node({ look, idx, bind }) {
+	// console.log(bind);
+	const element = useMemo(() => {
+		return (
+			<div className="node" style={{ touchAction: "none" }} {...bind}>
+				<div className={`node-coloured ${look}`}></div>
+			</div>
+		);
+	}, [look, bind]);
+	return <>{element}</>;
 }
+
+export default React.memo(Node);
