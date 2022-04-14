@@ -44,6 +44,16 @@ const StyledGrid = styled.div`
 		border-radius: 10%;
 		font-size: 10px;
 	}
+	.empty {
+		background: ${(props) => props.theme.colors.light};
+	}
+	.wall {
+		background: #39423f;
+		/* background: ${(props) => props.theme.colors.secondary}; */
+	}
+	.queued {
+		background: ${(props) => props.theme.colors.accent};
+	}
 `;
 
 export default StyledGrid;

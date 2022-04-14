@@ -7,6 +7,7 @@ const theme = {
 		primary: "#242625",
 		secondary: "#1d1f1e",
 		tertiary: "#1a1c1b",
+		light: "#d4d0c1",
 	},
 	fonts: { main: "'Syncopate', sans-serif" },
 };

@@ -1,15 +1,24 @@
 import { useEffect, useState } from "react";
 import { useDrag } from "@use-gesture/react";
+import depthFirstSearchMaze from "../maze_generators/depthFirstSearchMaze";
 
-export default function useAlgo(nodeCount, mainRef, size, cols, rows) {
+export default function useAlgo(
+	nodeCount,
+	mainRef,
+	size,
+	cols,
+	rows,
+	delayRef,
+	started
+) {
 	const [elements, setElements] = useState([]);
+	const [generator, setGenerator] = useState(null);
 	const [gridStart, setGridStart] = useState({
 		left: 0,
 		top: 0,
 	});
 	useEffect(() => {
 		if (mainRef === null) return;
-		console.log(mainRef.current);
 		setGridStart({
 			left: mainRef.offsetLeft,
 			top: mainRef.offsetTop,
@@ -19,24 +28,11 @@ export default function useAlgo(nodeCount, mainRef, size, cols, rows) {
 	const [paintNodes, setPaintNodes] = useState(null);
 
 	function Node({ look, idx }) {
-		let color;
-
-		switch (look) {
-			case "empty":
-				color = "#d4d0c1";
-				break;
-			case "wall":
-				color = "blue";
-				break;
-			default:
-				color = "#d4d0c1";
-		}
-
 		return (
 			<div className="node" {...bind()}>
 				<div
-					className="node-coloured"
-					style={{ background: color, touchAction: "none" }}
+					className={`node-coloured ${look}`}
+					style={{ touchAction: "none" }}
 				></div>
 			</div>
 		);
@@ -101,6 +97,27 @@ export default function useAlgo(nodeCount, mainRef, size, cols, rows) {
 		},
 		{ enabled: size > 20 }
 	);
+
+	const generate = async () => {
+		const generator = depthFirstSearchMaze(elements.length, cols);
+		while (true) {
+			await sleep(parseInt(delayRef.current.textContent));
+			const out = generator.next();
+			if (out.done === true) {
+				break;
+			}
+			setElements(out.value);
+		}
+	};
+
+	useEffect(() => {
+		if (started) {
+			generate();
+		}
+	}, [started]);
+	// if (elements.length > 0) {
+	// 	generate();
+	// }
 	const updateElements = (nodes) =>
 		nodes.map((el, idx) => <Node look={el} idx={idx} key={idx} />);
 
@@ -113,4 +130,8 @@ export default function useAlgo(nodeCount, mainRef, size, cols, rows) {
 	}, [nodeCount]);
 
 	return updateElements(elements);
+}
+
+function sleep(ms) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }

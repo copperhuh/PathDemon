@@ -4,25 +4,28 @@ import Sidebar from "../Sidebar";
 import StyledMain from "./Main.styled";
 
 export default function Main() {
+	const [size, setSize] = useState(30);
 	const [appState, setAppState] = useState({
-		size: 30,
+		delayRef: 30,
+		started: false,
 	});
 
 	const mainRef = useRef(null);
+	const delayRef = useRef(null);
 	const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 	const [gridProps, setGridProps] = useState({
 		cols: 0,
 		rows: 0,
-		size: appState.size,
+		size: size,
 	});
 
 	const updateGrid = () => {
-		const cols = Math.floor(dimensions.width / appState.size);
-		const rows = Math.floor(dimensions.height / appState.size);
+		const cols = Math.floor(dimensions.width / size);
+		const rows = Math.floor(dimensions.height / size);
 		setGridProps({
 			cols,
 			rows,
-			size: appState.size,
+			size: size,
 		});
 	};
 
@@ -48,20 +51,24 @@ export default function Main() {
 
 	useEffect(() => {
 		updateGrid();
-		console.log(window);
-	}, [appState.size]);
+	}, [size]);
 
 	return (
 		<StyledMain>
 			<Sidebar
-				size={appState.size}
+				size={size}
+				setSize={setSize}
+				delayRef={delayRef}
+				appState={appState}
 				setAppState={setAppState}
 				updateGrid={updateGrid}
 			/>
 			<Grid
+				delayRef={delayRef}
 				size={gridProps.size}
 				gridDimensions={{ cols: gridProps.cols, rows: gridProps.rows }}
 				mainRef={mainRef}
+				started={appState.started}
 			/>
 		</StyledMain>
 	);
