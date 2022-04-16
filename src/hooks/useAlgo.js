@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDrag } from "@use-gesture/react";
 import depthFirstSearchMaze from "../maze_generators/depthFirstSearchMaze";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +17,14 @@ export default function useAlgo(mainRef) {
 	const dispatch = useDispatch();
 
 	const [elements, setElements] = useState([]);
+	const [start, setStart] = useState(null);
+	const [target, setTarget] = useState(null);
+	const [transitionSpecial, setTransitionSpecial] = useState({
+		flag: false,
+		pos: null,
+		memoVal: null,
+	});
+	const [special, setSpecial] = useState({ pos: null, val: null });
 	const [gridStart, setGridStart] = useState({
 		left: 0,
 		top: 0,
@@ -75,7 +83,12 @@ export default function useAlgo(mainRef) {
 		}
 		if (!down) setPaintNodes(null);
 
-		if (currentNode === null || currentNode >= elements.length) {
+		if (
+			currentNode === null ||
+			currentNode >= elements.length ||
+			currentNode === target ||
+			currentNode === start
+		) {
 			return;
 		}
 		if (paintNodes === "toWall" && elements[currentNode] !== "wall") {
@@ -95,9 +108,147 @@ export default function useAlgo(mainRef) {
 			]);
 		}
 	}, {});
+	const bindSpecial = useDrag(
+		({ canceled, buttons, cancel, down, xy: [x, y] }) => {
+			if (
+				x < 0 ||
+				y < 0 ||
+				canceled ||
+				visualizationOngoing ||
+				buttons === 0 ||
+				!down
+			) {
+				if (special.val === "start") {
+					setElements((prevElements) => [
+						...prevElements.slice(0, start),
+						transitionSpecial.memoVal,
+						...prevElements.slice(start + 1),
+					]);
+					setStart(special.pos);
+				} else if (special.val === "target") {
+					setElements((prevElements) => [
+						...prevElements.slice(0, target),
+						transitionSpecial.memoVal,
+						...prevElements.slice(target + 1),
+					]);
+					setTarget(special.pos);
+				}
+				if (special.pos !== null) {
+					setElements((prevElements) => [
+						...prevElements.slice(0, special.pos),
+						special.val,
+						...prevElements.slice(special.pos + 1),
+					]);
+					if (transitionSpecial.pos === special.pos) {
+						setElements((prevElements) => [
+							...prevElements.slice(0, transitionSpecial.pos),
+							special.val,
+							...prevElements.slice(transitionSpecial.pos + 1),
+						]);
+					} else {
+						setElements((prevElements) => [
+							...prevElements.slice(0, transitionSpecial.pos),
+							"empty",
+							...prevElements.slice(transitionSpecial.pos + 1),
+						]);
+					}
+					setSpecial({ pos: null, val: null });
+					setTransitionSpecial({
+						flag: false,
+						pos: null,
+						memoVal: null,
+					});
+				}
+				cancel();
+				return;
+			}
+			const currentNode = getIdxFromCoords(x, y);
+			if (special.val === null) {
+				setSpecial({
+					pos: currentNode,
+					val: elements[currentNode],
+				});
+				setTransitionSpecial({
+					flag: false,
+					pos: currentNode,
+					memoVal: null,
+				});
+				//
+				setElements((prevElements) => [
+					...prevElements.slice(0, currentNode),
+					elements[currentNode] + "-transition",
+					...prevElements.slice(currentNode + 1),
+				]);
+				//
+			}
+			if (
+				currentNode === null ||
+				currentNode >= elements.length ||
+				currentNode === start ||
+				currentNode === target
+			) {
+				return;
+			}
+
+			if (special.pos !== currentNode) {
+				setSpecial((prevSpecial) => ({
+					...prevSpecial,
+					pos: currentNode,
+				}));
+				if (transitionSpecial.flag) {
+					if (special.val === "start") {
+						setElements((prevElements) => [
+							...prevElements.slice(0, start),
+							transitionSpecial.memoVal,
+							...prevElements.slice(start + 1),
+						]);
+						setStart(currentNode);
+					} else if (special.val === "target") {
+						setElements((prevElements) => [
+							...prevElements.slice(0, target),
+							transitionSpecial.memoVal,
+							...prevElements.slice(target + 1),
+						]);
+						setTarget(currentNode);
+					}
+					setTransitionSpecial((prev) => ({
+						...prev,
+						memoVal: elements[currentNode],
+					}));
+					setElements((prevElements) => [
+						...prevElements.slice(0, currentNode),
+						special.val,
+						...prevElements.slice(currentNode + 1),
+					]);
+				} else {
+					if (special.val === "start") {
+						setStart(currentNode);
+					} else if (special.val === "target") {
+						setTarget(currentNode);
+					}
+					setTransitionSpecial((prev) => ({
+						...prev,
+						flag: true,
+						memoVal: elements[currentNode],
+					}));
+					setElements((prevElements) => [
+						...prevElements.slice(0, currentNode),
+						special.val,
+						...prevElements.slice(currentNode + 1),
+					]);
+				}
+			}
+		},
+		{}
+	);
 
 	const generate = async () => {
-		const generator = depthFirstSearchMaze(elements.length, cols);
+		const generator = depthFirstSearchMaze(
+			elements.length,
+			cols,
+			start,
+			target
+		);
 		while (true) {
 			await sleep(parseInt(delayRef.current.textContent));
 			const out = generator.next();
@@ -117,13 +268,34 @@ export default function useAlgo(mainRef) {
 
 	const updateElements = (nodes) =>
 		nodes.map((el, idx) => (
-			<Node look={el} idx={idx} bind={{ ...bind() }} key={idx} />
+			<Node
+				look={el}
+				idx={idx}
+				bindSpecial={{ ...bindSpecial() }}
+				bind={{ ...bind() }}
+				key={idx}
+				size={size}
+			/>
 		));
 
 	useEffect(() => {
+		const localStart =
+			(Math.floor(rows / 2) - 1) * cols + Math.floor(rows / 3) + 1;
+		setStart(localStart);
+		const localTarget =
+			(Math.floor(rows / 2) - 1) * cols +
+			cols -
+			(Math.ceil(rows / 3) + 1);
+		setTarget(localTarget);
 		let cleanGrid = [];
 		for (let i = 0; i < cols * rows; i++) {
-			cleanGrid.push("empty");
+			if (i === localStart) {
+				cleanGrid.push("start");
+			} else if (i === localTarget) {
+				cleanGrid.push("target");
+			} else {
+				cleanGrid.push("empty");
+			}
 		}
 		setElements(cleanGrid);
 	}, [cols, rows]);

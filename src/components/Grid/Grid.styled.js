@@ -8,6 +8,7 @@ const StyledGrid = styled.div`
 	justify-content: center;
 	padding: 2rem 3rem;
 	height: 100%;
+	color: ${(props) => props.theme.colors.light};
 	.flex-container {
 		display: flex;
 		height: 100%;
@@ -41,16 +42,29 @@ const StyledGrid = styled.div`
 		border-radius: 10%;
 		font-size: 10px;
 		transition: all 0.1s;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
-	.empty {
+	.empty,
+	.start-transition,
+	.target-transition {
 		background: ${(props) => props.theme.colors.light};
 	}
+
 	.wall {
 		background: #39423f;
-		/* background: ${(props) => props.theme.colors.secondary}; */
 	}
 	.queued {
 		background: ${(props) => props.theme.colors.accent};
+	}
+	.start {
+		background: #905bc2;
+		cursor: grab;
+	}
+	.target {
+		background: #ad3160;
+		cursor: grab;
 	}
 `;
 

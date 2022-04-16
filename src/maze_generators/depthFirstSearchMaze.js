@@ -1,7 +1,13 @@
-function* depthFirstSearchMaze(leng, cols) {
+function* depthFirstSearchMaze(leng, cols, startPos, targetPos) {
 	let els = [];
 	for (let i = 0; i < leng; i++) {
-		els.push({ status: "wall", visited: false, index: i });
+		if (i === startPos) {
+			els.push({ status: "start", visited: false, index: i });
+		} else if (i === targetPos) {
+			els.push({ status: "target", visited: false, index: i });
+		} else {
+			els.push({ status: "wall", visited: false, index: i });
+		}
 	}
 	yield els.map((el) => el.status);
 
@@ -11,7 +17,8 @@ function* depthFirstSearchMaze(leng, cols) {
 	while (queue.length >= 1) {
 		const currentIdx = queue[queue.length - 1].index;
 		queue.pop();
-		els[currentIdx].status = "empty";
+		if (currentIdx !== startPos && currentIdx !== targetPos)
+			els[currentIdx].status = "empty";
 		yield els.map((el) => el.status);
 
 		let neighbors = [];
@@ -21,8 +28,16 @@ function* depthFirstSearchMaze(leng, cols) {
 		) {
 			neighbors.push(currentIdx + 2 * cols);
 			els[currentIdx + 2 * cols].visited = true;
-			els[currentIdx + 2 * cols].status = "queued";
-			els[currentIdx + cols].status = "empty";
+			if (
+				currentIdx + 2 * cols !== startPos &&
+				currentIdx + 2 * cols !== targetPos
+			)
+				els[currentIdx + 2 * cols].status = "queued";
+			if (
+				currentIdx + cols !== startPos &&
+				currentIdx + cols !== targetPos
+			)
+				els[currentIdx + cols].status = "empty";
 			els[currentIdx + cols].visited = true;
 
 			yield els.map((el) => el.status);
@@ -33,8 +48,16 @@ function* depthFirstSearchMaze(leng, cols) {
 		) {
 			neighbors.push(currentIdx - 2 * cols);
 			els[currentIdx - 2 * cols].visited = true;
-			els[currentIdx - 2 * cols].status = "queued";
-			els[currentIdx - cols].status = "empty";
+			if (
+				currentIdx - 2 * cols !== startPos &&
+				currentIdx - 2 * cols !== targetPos
+			)
+				els[currentIdx - 2 * cols].status = "queued";
+			if (
+				currentIdx - cols !== startPos &&
+				currentIdx - cols !== targetPos
+			)
+				els[currentIdx - cols].status = "empty";
 			els[currentIdx - cols].visited = true;
 
 			yield els.map((el) => el.status);
@@ -42,8 +65,10 @@ function* depthFirstSearchMaze(leng, cols) {
 		if (currentIdx % cols > 1 && els[currentIdx - 2].visited === false) {
 			neighbors.push(currentIdx - 2);
 			els[currentIdx - 2].visited = true;
-			els[currentIdx - 2].status = "queued";
-			els[currentIdx - 1].status = "empty";
+			if (currentIdx - 2 !== startPos && currentIdx - 2 !== targetPos)
+				els[currentIdx - 2].status = "queued";
+			if (currentIdx - 1 !== startPos && currentIdx - 1 !== targetPos)
+				els[currentIdx - 1].status = "empty";
 			els[currentIdx - 1].visited = true;
 
 			yield els.map((el) => el.status);
@@ -54,8 +79,10 @@ function* depthFirstSearchMaze(leng, cols) {
 		) {
 			neighbors.push(currentIdx + 2);
 			els[currentIdx + 2].visited = true;
-			els[currentIdx + 2].status = "queued";
-			els[currentIdx + 1].status = "empty";
+			if (currentIdx + 2 !== startPos && currentIdx + 2 !== targetPos)
+				els[currentIdx + 2].status = "queued";
+			if (currentIdx + 1 !== startPos && currentIdx + 1 !== targetPos)
+				els[currentIdx + 1].status = "empty";
 			els[currentIdx + 1].visited = true;
 
 			yield els.map((el) => el.status);
