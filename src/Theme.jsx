@@ -9,7 +9,7 @@ const theme = {
 		tertiary: "#1a1c1b",
 		light: "#d4d0c1",
 	},
-	fonts: { main: "'Syncopate', sans-serif" },
+	fonts: { main: "'Montserrat', sans-serif" },
 };
 
 const Theme = ({ children, variation }) => {

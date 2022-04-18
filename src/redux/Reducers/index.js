@@ -3,6 +3,10 @@ import {
 	SET_DELAY_REF,
 	CHANGE_DIMENSIONS,
 	SET_VISUALIZATION_ONGOING,
+	SET_PATH_VISIBLE,
+	SET_GENERATING,
+	SET_SKIP_REF,
+	SET_RESET,
 } from "../action-types";
 
 const initialState = {
@@ -13,6 +17,10 @@ const initialState = {
 	},
 	delayRef: null,
 	visualizationOngoing: false,
+	generating: "maze",
+	pathVisible: false,
+	skipRef: false,
+	reset: false,
 };
 
 export const reducer = (state = initialState, action) => {
@@ -30,6 +38,26 @@ export const reducer = (state = initialState, action) => {
 					cols: action.payload.cols,
 					rows: action.payload.rows,
 				},
+			};
+		case SET_GENERATING:
+			return {
+				...state,
+				generating: action.payload,
+			};
+		case SET_PATH_VISIBLE:
+			return {
+				...state,
+				pathVisible: action.payload,
+			};
+		case SET_SKIP_REF:
+			return {
+				...state,
+				skipRef: action.payload,
+			};
+		case SET_RESET:
+			return {
+				...state,
+				reset: action.payload,
 			};
 
 		default:

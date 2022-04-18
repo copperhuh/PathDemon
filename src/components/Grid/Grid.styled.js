@@ -9,10 +9,15 @@ const StyledGrid = styled.div`
 	padding: 2rem 3rem;
 	height: 100%;
 	color: ${(props) => props.theme.colors.light};
+	> * {
+		user-select: none;
+	}
 	.flex-container {
 		display: flex;
 		height: 100%;
 		width: 100%;
+		justify-content: center;
+		align-items: center;
 	}
 	.container {
 		display: grid;
@@ -25,8 +30,8 @@ const StyledGrid = styled.div`
 			${(props) => (props.size * 10) / 10}px
 		);
 		gap: 0;
-		height: 100%;
-		width: 100%;
+		/* height: 100%; */
+		/* width: 100%; */
 	}
 	.node {
 		width: 100%;
@@ -36,9 +41,9 @@ const StyledGrid = styled.div`
 		align-items: center;
 	}
 	.node-coloured {
-		height: ${(props) => (props.size * 8) / 10}px;
-		width: ${(props) => (props.size * 8) / 10}px;
-		margin: ${(props) => (props.size * 1) / 10}px;
+		height: ${(props) => (props.size * 8.5) / 10}px;
+		width: ${(props) => (props.size * 8.5) / 10}px;
+		margin: ${(props) => (props.size * 0.5) / 10}px;
 		border-radius: 10%;
 		font-size: 10px;
 		transition: all 0.1s;
@@ -58,12 +63,18 @@ const StyledGrid = styled.div`
 	.queued {
 		background: ${(props) => props.theme.colors.accent};
 	}
+	.visited {
+		background: #bd9f5c;
+	}
+	.path {
+		background: #664870;
+	}
 	.start {
-		background: #905bc2;
+		background: #664870;
 		cursor: grab;
 	}
 	.target {
-		background: #ad3160;
+		background: #664870;
 		cursor: grab;
 	}
 `;

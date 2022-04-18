@@ -4,14 +4,24 @@ import Slider from "@mui/material/Slider";
 import {
 	doChangeSize,
 	doSetDelayRef,
+	doSetGenerating,
+	doSetPathVisible,
+	doSetSkipRef,
 	doSetVisualizationOngoing,
+	doSetReset,
 } from "../../redux/Actions";
 import { connect } from "react-redux";
 
 function Sidebar({
 	visualizationOngoing,
+	skip,
 	setVisualizationOngoing,
 	setDelayRef,
+	setGenerating,
+	setPathVisible,
+	setSkipRef,
+	setReset,
+	reset,
 	changeSize,
 }) {
 	const [settings, setSettings] = useState({
@@ -20,10 +30,15 @@ function Sidebar({
 	});
 
 	const delayRef = useRef(null);
+	const skipRef = useRef(null);
 
 	useEffect(() => {
 		setDelayRef(delayRef);
 	}, [delayRef]);
+
+	useEffect(() => {
+		setSkipRef(skipRef);
+	}, [skipRef]);
 
 	const handleChange = (e) => {
 		setSettings((prevState) => ({
@@ -33,6 +48,12 @@ function Sidebar({
 		if (e.target.name === "size") {
 			changeSize(e.target.value);
 		}
+	};
+
+	const handleGenerate = (mode) => {
+		setVisualizationOngoing(true);
+		setGenerating(mode);
+		setPathVisible(false);
 	};
 
 	return (
@@ -71,9 +92,43 @@ function Sidebar({
 			<div className="sidebar-element">
 				<button
 					disabled={visualizationOngoing}
-					onClick={() => setVisualizationOngoing(true)}
+					onClick={() => {
+						handleGenerate("maze");
+					}}
 				>
 					GENERATE MAZE
+				</button>
+			</div>
+			<div className="sidebar-element">
+				<button
+					disabled={visualizationOngoing}
+					onClick={() => {
+						handleGenerate("path");
+					}}
+				>
+					GENERATE PATH
+				</button>
+			</div>
+			<div className="sidebar-element">
+				<button
+					ref={skipRef}
+					value={false}
+					disabled={!visualizationOngoing}
+					onClick={() => {
+						skipRef.current.value = true;
+					}}
+				>
+					SKIP
+				</button>
+			</div>
+			<div className="sidebar-element">
+				<button
+					value={reset}
+					onClick={() => {
+						setReset(true);
+					}}
+				>
+					CLEAR GRID
 				</button>
 			</div>
 		</StyledSidebar>
@@ -83,12 +138,17 @@ function Sidebar({
 const Actions = (dispatch) => ({
 	changeSize: (size) => dispatch(doChangeSize(size)),
 	setDelayRef: (sortType) => dispatch(doSetDelayRef(sortType)),
+	setGenerating: (generating) => dispatch(doSetGenerating(generating)),
+	setPathVisible: (bool) => dispatch(doSetPathVisible(bool)),
+	setSkipRef: (bool) => dispatch(doSetSkipRef(bool)),
+	setReset: (bool) => dispatch(doSetReset(bool)),
 	setVisualizationOngoing: (visualizationOngoing) =>
 		dispatch(doSetVisualizationOngoing(visualizationOngoing)),
 });
 
 const Props = (state) => ({
 	visualizationOngoing: state.visualizationOngoing,
+	reset: state.reset,
 });
 
 export default connect(Props, Actions)(Sidebar);

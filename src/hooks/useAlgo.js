@@ -1,9 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDrag } from "@use-gesture/react";
 import depthFirstSearchMaze from "../maze_generators/depthFirstSearchMaze";
 import { useDispatch, useSelector } from "react-redux";
-import { doSetVisualizationOngoing } from "../redux/Actions";
+import {
+	doSetGenerating,
+	doSetPathVisible,
+	doSetReset,
+	doSetSkip,
+	doSetVisualizationOngoing,
+} from "../redux/Actions";
 import Node from "../components/Grid/Node";
+import aStar from "../maze_solvers/aStar";
 
 export default function useAlgo(mainRef) {
 	const size = useSelector((state) => state.size);
@@ -13,6 +20,10 @@ export default function useAlgo(mainRef) {
 	const visualizationOngoing = useSelector(
 		(state) => state.visualizationOngoing
 	);
+	const generating = useSelector((state) => state.generating);
+	const pathVisible = useSelector((state) => state.pathVisible);
+	const skipRef = useSelector((state) => state.skipRef);
+	const reset = useSelector((state) => state.reset);
 
 	const dispatch = useDispatch();
 
@@ -24,6 +35,7 @@ export default function useAlgo(mainRef) {
 		pos: null,
 		memoVal: null,
 	});
+	const resetRef = useRef(reset);
 	const [special, setSpecial] = useState({ pos: null, val: null });
 	const [gridStart, setGridStart] = useState({
 		left: 0,
@@ -60,23 +72,24 @@ export default function useAlgo(mainRef) {
 			buttons === 0
 		) {
 			setPaintNodes(null);
+			if (pathVisible) generateInstant();
 			cancel();
 			return;
 		}
 		const currentNode = getIdxFromCoords(x, y);
 		if (paintNodes === null) {
-			if (elements[getIdxFromCoords(x, y)] === "empty") {
-				setPaintNodes("toWall");
-				setElements((prevElements) => [
-					...prevElements.slice(0, currentNode),
-					"wall",
-					...prevElements.slice(currentNode + 1),
-				]);
-			} else {
+			if (elements[getIdxFromCoords(x, y)] === "wall") {
 				setPaintNodes("toEmpty");
 				setElements((prevElements) => [
 					...prevElements.slice(0, currentNode),
 					"empty",
+					...prevElements.slice(currentNode + 1),
+				]);
+			} else {
+				setPaintNodes("toWall");
+				setElements((prevElements) => [
+					...prevElements.slice(0, currentNode),
+					"wall",
 					...prevElements.slice(currentNode + 1),
 				]);
 			}
@@ -107,6 +120,7 @@ export default function useAlgo(mainRef) {
 				...prevElements.slice(currentNode + 1),
 			]);
 		}
+		// if (pathVisible) generateInstant();
 	}, {});
 	const bindSpecial = useDrag(
 		({ canceled, buttons, cancel, down, xy: [x, y] }) => {
@@ -158,7 +172,10 @@ export default function useAlgo(mainRef) {
 						pos: null,
 						memoVal: null,
 					});
+					if (pathVisible && special.pos !== transitionSpecial.pos)
+						generateInstant();
 				}
+
 				cancel();
 				return;
 			}
@@ -180,6 +197,7 @@ export default function useAlgo(mainRef) {
 					...prevElements.slice(currentNode + 1),
 				]);
 				//
+				// if (pathVisible) generateInstant();
 			}
 			if (
 				currentNode === null ||
@@ -243,17 +261,69 @@ export default function useAlgo(mainRef) {
 	);
 
 	const generate = async () => {
-		const generator = depthFirstSearchMaze(
-			elements.length,
-			cols,
-			start,
-			target
-		);
+		let generator;
+		if (generating === "path") {
+			generator = aStar(elements, cols, start, target, false);
+		} else {
+			generator = depthFirstSearchMaze(
+				elements.length,
+				cols,
+				start,
+				target,
+				false
+			);
+		}
+
 		while (true) {
+			if (skipRef.current.value === "true") {
+				generateInstant();
+				skipRef.current.value = "false";
+				return;
+			}
 			await sleep(parseInt(delayRef.current.textContent));
+			if (resetRef.current === true) {
+				dispatch(doSetVisualizationOngoing(false));
+				dispatch(doSetPathVisible(false));
+				dispatch(doSetReset(false));
+				return;
+			}
 			const out = generator.next();
 			if (out.done === true) {
 				dispatch(doSetVisualizationOngoing(false));
+				if (generating === "path") {
+					dispatch(doSetPathVisible(true));
+				}
+				break;
+			}
+			setElements(out.value);
+		}
+	};
+	const generateInstant = () => {
+		let generator;
+		if (generating === "path") {
+			generator = aStar(elements, cols, start, target, true);
+		} else {
+			generator = depthFirstSearchMaze(
+				elements.length,
+				cols,
+				start,
+				target,
+				true
+			);
+		}
+		if (resetRef.current === true) {
+			dispatch(doSetVisualizationOngoing(false));
+			dispatch(doSetPathVisible(false));
+			dispatch(doSetReset(false));
+			return;
+		}
+		while (true) {
+			const out = generator.next();
+			if (out.done === true) {
+				dispatch(doSetVisualizationOngoing(false));
+				if (generating === "path") {
+					dispatch(doSetPathVisible(true));
+				}
 				break;
 			}
 			setElements(out.value);
@@ -279,30 +349,38 @@ export default function useAlgo(mainRef) {
 		));
 
 	useEffect(() => {
-		const localStart =
-			(Math.floor(rows / 2) - 1) * cols + Math.floor(rows / 3) + 1;
-		setStart(localStart);
-		const localTarget =
-			(Math.floor(rows / 2) - 1) * cols +
-			cols -
-			(Math.ceil(rows / 3) + 1);
-		setTarget(localTarget);
-		let cleanGrid = [];
-		for (let i = 0; i < cols * rows; i++) {
-			if (i === localStart) {
-				cleanGrid.push("start");
-			} else if (i === localTarget) {
-				cleanGrid.push("target");
-			} else {
-				cleanGrid.push("empty");
-			}
+		resetRef.current = reset;
+		resetGrid(cols, rows, setStart, setTarget, setElements);
+		dispatch(doSetVisualizationOngoing(false));
+		dispatch(doSetPathVisible(false));
+		if (!visualizationOngoing) {
+			dispatch(doSetReset(false));
 		}
-		setElements(cleanGrid);
-	}, [cols, rows]);
+	}, [cols, rows, reset]);
 
 	return updateElements(elements);
 }
 
 function sleep(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function resetGrid(cols, rows, setStart, setTarget, setElements) {
+	const localStart = Math.floor(rows / 2) * cols + Math.floor(cols / 4);
+	const localTarget =
+		Math.floor(rows / 2) * cols + cols - Math.floor(cols / 4) - 1;
+	let cleanGrid = [];
+	for (let i = 0; i < cols * rows; i++) {
+		if (i === localStart) {
+			cleanGrid.push("start");
+		} else if (i === localTarget) {
+			cleanGrid.push("target");
+		} else {
+			cleanGrid.push("empty");
+		}
+	}
+	setStart(localStart);
+	setTarget(localTarget);
+	setElements(cleanGrid);
+	return [cleanGrid, localStart, localTarget];
 }

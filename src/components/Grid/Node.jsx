@@ -3,7 +3,6 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import FlagIcon from "@mui/icons-material/Flag";
 
 function Node({ look, idx, bindSpecial, bind, size }) {
-	console.log(look);
 	const element = useMemo(() => {
 		return (
 			<>
