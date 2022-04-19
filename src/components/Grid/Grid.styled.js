@@ -6,7 +6,7 @@ const StyledGrid = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 2rem 3rem;
+	padding: 2.5rem 4rem;
 	height: 100%;
 	color: ${(props) => props.theme.colors.light};
 	> * {
@@ -16,8 +16,6 @@ const StyledGrid = styled.div`
 		display: flex;
 		height: 100%;
 		width: 100%;
-		justify-content: center;
-		align-items: center;
 	}
 	.container {
 		display: grid;
