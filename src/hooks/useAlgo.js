@@ -11,6 +11,8 @@ import {
 } from "../redux/Actions";
 import Node from "../components/Grid/Node";
 import aStar from "../maze_solvers/aStar";
+import kruskalMaze from "../maze_generators/kruskalMaze";
+import primMaze from "../maze_generators/primMaze";
 
 export default function useAlgo(mainRef) {
 	const size = useSelector((state) => state.size);
@@ -265,13 +267,14 @@ export default function useAlgo(mainRef) {
 		if (generating === "path") {
 			generator = aStar(elements, cols, start, target, false);
 		} else {
-			generator = depthFirstSearchMaze(
-				elements.length,
-				cols,
-				start,
-				target,
-				false
-			);
+			// generator = depthFirstSearchMaze(
+			// 	elements.length,
+			// 	cols,
+			// 	start,
+			// 	target,
+			// 	false
+			// );
+			generator = primMaze(elements.length, cols, start, target, false);
 		}
 
 		while (true) {
