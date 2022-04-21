@@ -87,7 +87,6 @@ function* aldousBroderMaze(leng, cols, startPos, targetPos, instant) {
 			els[current].status = "empty";
 		}
 
-		console.log(unvisited);
 		current = neighbors[randomNeighbor];
 	}
 	if (els[last].status !== "start" && els[last].status !== "target") {

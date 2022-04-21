@@ -14,6 +14,7 @@ import aStar from "../maze_solvers/aStar";
 import kruskalMaze from "../maze_generators/kruskalMaze";
 import primMaze from "../maze_generators/primMaze";
 import aldousBroderMaze from "../maze_generators/aldousBroderMaze";
+import wilsonMaze from "../maze_generators/wilsonMaze";
 
 export default function useAlgo(mainRef) {
 	const size = useSelector((state) => state.size);
@@ -275,13 +276,7 @@ export default function useAlgo(mainRef) {
 			// 	target,
 			// 	false
 			// );
-			generator = aldousBroderMaze(
-				elements.length,
-				cols,
-				start,
-				target,
-				false
-			);
+			generator = wilsonMaze(elements.length, cols, start, target, false);
 		}
 
 		while (true) {
@@ -313,13 +308,7 @@ export default function useAlgo(mainRef) {
 		if (generating === "path") {
 			generator = aStar(elements, cols, start, target, true);
 		} else {
-			generator = aldousBroderMaze(
-				elements.length,
-				cols,
-				start,
-				target,
-				true
-			);
+			generator = wilsonMaze(elements.length, cols, start, target, true);
 		}
 		if (resetRef.current === true) {
 			dispatch(doSetVisualizationOngoing(false));
