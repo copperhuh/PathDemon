@@ -60,7 +60,6 @@ function* primMaze(leng, cols, startPos, targetPos, instant) {
 		if (currentIdx % cols !== cols - 1 && cells[currentIdx + 1] !== null) {
 			neighbors.push(currentIdx + 1);
 		}
-		console.log(neighbors);
 		if (
 			neighbors.length === 2 &&
 			((els[neighbors[0]].visited && !els[neighbors[1]].visited) ||

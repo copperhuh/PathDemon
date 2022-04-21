@@ -13,6 +13,7 @@ import Node from "../components/Grid/Node";
 import aStar from "../maze_solvers/aStar";
 import kruskalMaze from "../maze_generators/kruskalMaze";
 import primMaze from "../maze_generators/primMaze";
+import aldousBroderMaze from "../maze_generators/aldousBroderMaze";
 
 export default function useAlgo(mainRef) {
 	const size = useSelector((state) => state.size);
@@ -274,7 +275,13 @@ export default function useAlgo(mainRef) {
 			// 	target,
 			// 	false
 			// );
-			generator = primMaze(elements.length, cols, start, target, false);
+			generator = aldousBroderMaze(
+				elements.length,
+				cols,
+				start,
+				target,
+				false
+			);
 		}
 
 		while (true) {
@@ -306,7 +313,7 @@ export default function useAlgo(mainRef) {
 		if (generating === "path") {
 			generator = aStar(elements, cols, start, target, true);
 		} else {
-			generator = depthFirstSearchMaze(
+			generator = aldousBroderMaze(
 				elements.length,
 				cols,
 				start,
