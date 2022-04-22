@@ -15,6 +15,7 @@ import kruskalMaze from "../maze_generators/kruskalMaze";
 import primMaze from "../maze_generators/primMaze";
 import aldousBroderMaze from "../maze_generators/aldousBroderMaze";
 import wilsonMaze from "../maze_generators/wilsonMaze";
+import recursiveDivisionMaze from "../maze_generators/recursiveDivisionMaze";
 
 export default function useAlgo(mainRef) {
 	const size = useSelector((state) => state.size);
@@ -276,7 +277,13 @@ export default function useAlgo(mainRef) {
 			// 	target,
 			// 	false
 			// );
-			generator = wilsonMaze(elements.length, cols, start, target, false);
+			generator = recursiveDivisionMaze(
+				elements.length,
+				cols,
+				start,
+				target,
+				false
+			);
 		}
 
 		while (true) {
@@ -308,7 +315,13 @@ export default function useAlgo(mainRef) {
 		if (generating === "path") {
 			generator = aStar(elements, cols, start, target, true);
 		} else {
-			generator = wilsonMaze(elements.length, cols, start, target, true);
+			generator = recursiveDivisionMaze(
+				elements.length,
+				cols,
+				start,
+				target,
+				true
+			);
 		}
 		if (resetRef.current === true) {
 			dispatch(doSetVisualizationOngoing(false));
