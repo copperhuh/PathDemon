@@ -7,6 +7,7 @@ import {
 	SET_GENERATING,
 	SET_SKIP_REF,
 	SET_RESET,
+	CHANGE_MAZE_TYPE,
 } from "../action-types";
 
 const initialState = {
@@ -21,6 +22,7 @@ const initialState = {
 	pathVisible: false,
 	skipRef: false,
 	reset: false,
+	mazeType: "DFS",
 };
 
 export const reducer = (state = initialState, action) => {
@@ -58,6 +60,11 @@ export const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				reset: action.payload,
+			};
+		case CHANGE_MAZE_TYPE:
+			return {
+				...state,
+				mazeType: action.payload,
 			};
 
 		default:

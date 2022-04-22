@@ -22,6 +22,7 @@ const GlobalStyles = createGlobalStyle`
   }
   button, a{
     transition: all 0.2s;
+    cursor: pointer;
     
     &:hover, &:focus, a{
       transition: all 0.2s;
@@ -44,6 +45,28 @@ const GlobalStyles = createGlobalStyle`
       width: 7px;
       border-radius: 5px;
     }
+  }
+  
+  .MuiList-root{
+    background: ${(props) => props.theme.colors.primary};
+    .MuiMenuItem-root {
+      font-family: ${(props) => props.theme.fonts.main};
+      color: ${(props) => props.theme.colors.accent};
+      font-weight: 600;
+      transition: all 0.2s;
+
+      :hover{
+        background: ${(props) => props.theme.colors.accent} !important;
+        color: ${(props) => props.theme.colors.primary};
+        transition: all 0.2s;
+  
+      }
+    }
+    .Mui-selected{
+      background: ${(props) => props.theme.colors.primary} !important;
+
+    }
+    
   }
   #root{
     height: 100%;

@@ -29,6 +29,7 @@ export default function useAlgo(mainRef) {
 	const pathVisible = useSelector((state) => state.pathVisible);
 	const skipRef = useSelector((state) => state.skipRef);
 	const reset = useSelector((state) => state.reset);
+	const mazeType = useSelector((state) => state.mazeType);
 
 	const dispatch = useDispatch();
 
@@ -277,7 +278,7 @@ export default function useAlgo(mainRef) {
 			// 	target,
 			// 	false
 			// );
-			generator = recursiveDivisionMaze(
+			generator = getMazeAlgo(mazeType)(
 				elements.length,
 				cols,
 				start,
@@ -315,7 +316,7 @@ export default function useAlgo(mainRef) {
 		if (generating === "path") {
 			generator = aStar(elements, cols, start, target, true);
 		} else {
-			generator = recursiveDivisionMaze(
+			generator = getMazeAlgo(mazeType)(
 				elements.length,
 				cols,
 				start,
@@ -396,3 +397,22 @@ function resetGrid(cols, rows, setStart, setTarget, setElements) {
 	setElements(cleanGrid);
 	return [cleanGrid, localStart, localTarget];
 }
+
+const getMazeAlgo = (mazeType) => {
+	switch (mazeType) {
+		case "DFS":
+			return depthFirstSearchMaze;
+		case "Kruskal":
+			return kruskalMaze;
+		case "Prim":
+			return primMaze;
+		case "Recursive":
+			return recursiveDivisionMaze;
+		case "Aldous-Broder":
+			return aldousBroderMaze;
+		case "Wilson":
+			return wilsonMaze;
+		default:
+			return depthFirstSearchMaze;
+	}
+};

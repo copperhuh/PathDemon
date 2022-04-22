@@ -45,6 +45,38 @@ const StyledSidebar = styled.div`
 			color: #3b4540;
 		}
 	}
+	.select {
+		font-family: ${(props) => props.theme.fonts.main};
+		color: ${(props) => props.theme.colors.secondary};
+		background: ${(props) => props.theme.colors.accent};
+		border-radius: 0%;
+		border: 0;
+		font-weight: 600;
+		text-align: center;
+		transition: all 0.2s;
+		:hover,
+		:focus {
+			background: ${(props) => props.theme.colors.secondary};
+			color: ${(props) => props.theme.colors.accent};
+			transition: all 0.2s;
+			.MuiSvgIcon-root {
+				color: ${(props) => props.theme.colors.accent};
+			}
+		}
+		.MuiOutlinedInput-notchedOutline {
+			border: none;
+		}
+	}
+	.MuiInputLabel-root {
+		font-family: ${(props) => props.theme.fonts.main};
+		color: ${(props) => props.theme.colors.accent} !important;
+		font-weight: 600;
+		top: -20%;
+		left: 8%;
+	}
+	.MuiFormControl-root {
+		margin-top: 1.2rem;
+	}
 `;
 
 export default StyledSidebar;

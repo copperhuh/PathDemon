@@ -7,6 +7,7 @@ import {
 	SET_PATH_VISIBLE,
 	SET_SKIP_REF,
 	SET_RESET,
+	CHANGE_MAZE_TYPE,
 } from "../action-types";
 
 export const doChangeSize = (size) => ({
@@ -43,4 +44,8 @@ export const doSetSkipRef = (bool) => ({
 export const doSetReset = (bool) => ({
 	type: SET_RESET,
 	payload: bool,
+});
+export const doChangeMazeType = (mazeType) => ({
+	type: CHANGE_MAZE_TYPE,
+	payload: mazeType,
 });

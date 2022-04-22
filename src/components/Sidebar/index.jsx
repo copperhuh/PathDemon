@@ -9,8 +9,10 @@ import {
 	doSetSkipRef,
 	doSetVisualizationOngoing,
 	doSetReset,
+	doChangeMazeType,
 } from "../../redux/Actions";
 import { connect } from "react-redux";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 function Sidebar({
 	visualizationOngoing,
@@ -23,10 +25,12 @@ function Sidebar({
 	setReset,
 	reset,
 	changeSize,
+	changeMazeType,
 }) {
 	const [settings, setSettings] = useState({
 		size: 50,
 		delay: 50,
+		mazeType: "DFS",
 	});
 
 	const delayRef = useRef(null);
@@ -47,6 +51,8 @@ function Sidebar({
 		}));
 		if (e.target.name === "size") {
 			changeSize(e.target.value);
+		} else if (e.target.name === "mazeType") {
+			changeMazeType(e.target.value);
 		}
 	};
 
@@ -110,6 +116,29 @@ function Sidebar({
 				</button>
 			</div>
 			<div className="sidebar-element">
+				<FormControl fullWidth>
+					<InputLabel className="label" id="select-label">
+						MAZE ALGORITHM
+					</InputLabel>
+					<Select
+						labelId="select-label"
+						className="select"
+						value={settings.mazeType}
+						name={"mazeType"}
+						onChange={handleChange}
+					>
+						<MenuItem value={"DFS"}>DFS</MenuItem>
+						<MenuItem value={"Kruskal"}>Kruskal</MenuItem>
+						<MenuItem value={"Prim"}>Prim</MenuItem>
+						<MenuItem value={"Recursive"}>Recursive</MenuItem>
+						<MenuItem value={"Aldous-Broder"}>
+							Aldous-Broder
+						</MenuItem>
+						<MenuItem value={"Wilson"}>Wilson</MenuItem>
+					</Select>
+				</FormControl>
+			</div>
+			<div className="sidebar-element">
 				<button
 					ref={skipRef}
 					value={false}
@@ -142,6 +171,7 @@ const Actions = (dispatch) => ({
 	setPathVisible: (bool) => dispatch(doSetPathVisible(bool)),
 	setSkipRef: (bool) => dispatch(doSetSkipRef(bool)),
 	setReset: (bool) => dispatch(doSetReset(bool)),
+	changeMazeType: (mazeType) => dispatch(doChangeMazeType(mazeType)),
 	setVisualizationOngoing: (visualizationOngoing) =>
 		dispatch(doSetVisualizationOngoing(visualizationOngoing)),
 });
