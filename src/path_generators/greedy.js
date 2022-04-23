@@ -1,6 +1,6 @@
 import PriorityQueue from "js-priority-queue";
 
-export default function* aStar(nodes, cols, startPos, targetPos, instant) {
+export default function* greedy(nodes, cols, startPos, targetPos, instant) {
 	let path;
 	let els = [];
 
@@ -10,9 +10,19 @@ export default function* aStar(nodes, cols, startPos, targetPos, instant) {
 			nodes[i] === "start" ||
 			nodes[i] === "target"
 		) {
-			els.push({ status: nodes[i], index: i, neighbors: [] });
+			els.push({
+				status: nodes[i],
+				index: i,
+				neighbors: [],
+				visited: false,
+			});
 		} else {
-			els.push({ status: "empty", index: i, neighbors: [] });
+			els.push({
+				status: "empty",
+				index: i,
+				neighbors: [],
+				visited: false,
+			});
 		}
 	}
 	for (let one of els) {
@@ -57,22 +67,19 @@ export default function* aStar(nodes, cols, startPos, targetPos, instant) {
 		},
 		initialValues: [startPos],
 	});
-	let openSetEls = [];
+	let openSetEls = [startPos];
 
 	let cameFrom = [];
-	let gScore = [];
 	let fScore = [];
 
 	let counter = 0;
 	let counts = [];
 	for (let i = 0; i < els.length; i++) {
 		cameFrom.push(null);
-		gScore.push(Infinity);
 		fScore.push(Infinity);
 		counts.push(0);
 	}
 
-	gScore[startPos] = 0;
 	fScore[startPos] = h(startPos);
 
 	while (openSet.length !== 0) {
@@ -80,7 +87,9 @@ export default function* aStar(nodes, cols, startPos, targetPos, instant) {
 
 		let current = openSet.dequeue();
 		openSetEls.splice(openSetEls.indexOf(current), 1);
+		els[current].visited = true;
 
+		console.log(openSetEls.length, openSet.length);
 		if (current === targetPos) {
 			path = [current];
 			while (cameFrom[current] !== null) {
@@ -100,16 +109,11 @@ export default function* aStar(nodes, cols, startPos, targetPos, instant) {
 		) {
 			els[current].status = "visited";
 			changed = true;
-			// yield els.map((el) => el.status);
 		}
-
 		for (let neighbor of els[current].neighbors) {
-			const tempGScore = gScore[current] + 1;
-
-			if (tempGScore < gScore[neighbor]) {
+			if (els[neighbor].visited === false) {
 				cameFrom[neighbor] = current;
-				gScore[neighbor] = tempGScore;
-				fScore[neighbor] = tempGScore + h(neighbor);
+				fScore[neighbor] = h(neighbor);
 				if (!openSetEls.includes(neighbor)) {
 					counter++;
 					counts[neighbor] = counter;
@@ -131,5 +135,6 @@ export default function* aStar(nodes, cols, startPos, targetPos, instant) {
 			yield els.map((el) => el.status);
 		}
 	}
+
 	yield els.map((el) => el.status);
 }

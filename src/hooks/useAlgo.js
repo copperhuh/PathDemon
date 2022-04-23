@@ -17,6 +17,8 @@ import aldousBroderMaze from "../maze_generators/aldousBroderMaze";
 import wilsonMaze from "../maze_generators/wilsonMaze";
 import recursiveDivisionMaze from "../maze_generators/recursiveDivisionMaze";
 import depthFirst from "../path_generators/depthFirst";
+import breadthFirst from "../path_generators/breadthFirst";
+import greedy from "../path_generators/greedy";
 
 export default function useAlgo(mainRef) {
 	const size = useSelector((state) => state.size);
@@ -270,7 +272,7 @@ export default function useAlgo(mainRef) {
 	const generate = async () => {
 		let generator;
 		if (generating === "path") {
-			generator = depthFirst(elements, cols, start, target, false);
+			generator = aStar(elements, cols, start, target, false);
 		} else {
 			generator = getMazeAlgo(mazeType)(
 				elements.length,
@@ -288,6 +290,7 @@ export default function useAlgo(mainRef) {
 				return;
 			}
 			await sleep(parseInt(delayRef.current.textContent));
+
 			if (resetRef.current === true) {
 				dispatch(doSetVisualizationOngoing(false));
 				dispatch(doSetPathVisible(false));
@@ -308,7 +311,7 @@ export default function useAlgo(mainRef) {
 	const generateInstant = () => {
 		let generator;
 		if (generating === "path") {
-			generator = depthFirst(elements, cols, start, target, true);
+			generator = aStar(elements, cols, start, target, true);
 		} else {
 			generator = getMazeAlgo(mazeType)(
 				elements.length,

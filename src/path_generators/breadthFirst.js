@@ -1,4 +1,10 @@
-export default function* depthFirst(nodes, cols, startPos, targetPos, instant) {
+export default function* breadthFirst(
+	nodes,
+	cols,
+	startPos,
+	targetPos,
+	instant
+) {
 	let path;
 	let els = [];
 
@@ -15,6 +21,7 @@ export default function* depthFirst(nodes, cols, startPos, targetPos, instant) {
 	}
 
 	let openSet = [startPos];
+	els[startPos].visited = true;
 	let cameFrom = [];
 
 	for (let i = 0; i < els.length; i++) {
@@ -25,56 +32,26 @@ export default function* depthFirst(nodes, cols, startPos, targetPos, instant) {
 		let changed = false;
 
 		let current = openSet.pop();
-		els[current].visited = true;
 
 		if (
-			current % cols !== 0 &&
-			els[current - 1].status !== "wall" &&
-			els[current - 1].visited === false
+			current - cols >= 0 &&
+			els[current - cols].status !== "wall" &&
+			els[current - cols].visited === false
 		) {
-			openSet.push(current - 1);
-			cameFrom[current - 1] = current;
+			openSet.unshift(current - cols);
+			els[current - cols].visited = true;
+			cameFrom[current - cols] = current;
 			if (
-				current - 1 !== startPos &&
-				current - 1 !== targetPos &&
-				els[current - 1].status !== "queued"
+				current - cols !== startPos &&
+				current - cols !== targetPos &&
+				els[current - cols].status !== "queued"
 			) {
-				els[current - 1].status = "queued";
+				els[current - cols].status = "queued";
 				changed = true;
 			}
 
-			if (current - 1 === targetPos) {
-				current = current - 1;
-				path = [current];
-				while (cameFrom[current] !== null) {
-					current = cameFrom[current];
-					path.unshift(current);
-					if (current !== startPos && current !== targetPos) {
-						els[current].status = "path";
-						if (!instant) yield els.map((el) => el.status);
-					}
-				}
-				break;
-			}
-		}
-		if (
-			current + cols < nodes.length &&
-			els[current + cols].status !== "wall" &&
-			els[current + cols].visited === false
-		) {
-			openSet.push(current + cols);
-			cameFrom[current + cols] = current;
-			if (
-				current + cols !== startPos &&
-				current + cols !== targetPos &&
-				els[current + cols].status !== "queued"
-			) {
-				els[current + cols].status = "queued";
-				changed = true;
-			}
-
-			if (current + cols === targetPos) {
-				current = current + cols;
+			if (current - cols === targetPos) {
+				current = current - cols;
 				path = [current];
 				while (cameFrom[current] !== null) {
 					current = cameFrom[current];
@@ -92,7 +69,8 @@ export default function* depthFirst(nodes, cols, startPos, targetPos, instant) {
 			els[current + 1].status !== "wall" &&
 			els[current + 1].visited === false
 		) {
-			openSet.push(current + 1);
+			openSet.unshift(current + 1);
+			els[current + 1].visited = true;
 			cameFrom[current + 1] = current;
 			if (
 				current + 1 !== startPos &&
@@ -118,23 +96,55 @@ export default function* depthFirst(nodes, cols, startPos, targetPos, instant) {
 			}
 		}
 		if (
-			current - cols >= 0 &&
-			els[current - cols].status !== "wall" &&
-			els[current - cols].visited === false
+			current + cols < nodes.length &&
+			els[current + cols].status !== "wall" &&
+			els[current + cols].visited === false
 		) {
-			openSet.push(current - cols);
-			cameFrom[current - cols] = current;
+			openSet.unshift(current + cols);
+			els[current + cols].visited = true;
+			cameFrom[current + cols] = current;
 			if (
-				current - cols !== startPos &&
-				current - cols !== targetPos &&
-				els[current - cols].status !== "queued"
+				current + cols !== startPos &&
+				current + cols !== targetPos &&
+				els[current + cols].status !== "queued"
 			) {
-				els[current - cols].status = "queued";
+				els[current + cols].status = "queued";
 				changed = true;
 			}
 
-			if (current - cols === targetPos) {
-				current = current - cols;
+			if (current + cols === targetPos) {
+				current = current + cols;
+				path = [current];
+				while (cameFrom[current] !== null) {
+					current = cameFrom[current];
+					path.unshift(current);
+					if (current !== startPos && current !== targetPos) {
+						els[current].status = "path";
+						if (!instant) yield els.map((el) => el.status);
+					}
+				}
+				break;
+			}
+		}
+		if (
+			current % cols !== 0 &&
+			els[current - 1].status !== "wall" &&
+			els[current - 1].visited === false
+		) {
+			openSet.unshift(current - 1);
+			els[current - 1].visited = true;
+			cameFrom[current - 1] = current;
+			if (
+				current - 1 !== startPos &&
+				current - 1 !== targetPos &&
+				els[current - 1].status !== "queued"
+			) {
+				els[current - 1].status = "queued";
+				changed = true;
+			}
+
+			if (current - 1 === targetPos) {
+				current = current - 1;
 				path = [current];
 				while (cameFrom[current] !== null) {
 					current = cameFrom[current];
