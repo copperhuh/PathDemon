@@ -34,6 +34,7 @@ export default function useAlgo(mainRef) {
 	const skipRef = useSelector((state) => state.skipRef);
 	const reset = useSelector((state) => state.reset);
 	const mazeType = useSelector((state) => state.mazeType);
+	const searchType = useSelector((state) => state.searchType);
 
 	const dispatch = useDispatch();
 
@@ -273,7 +274,13 @@ export default function useAlgo(mainRef) {
 	const generate = async () => {
 		let generator;
 		if (generating === "path") {
-			generator = dijkstra(elements, cols, start, target, false);
+			generator = getSearchAlgo(searchType)(
+				elements,
+				cols,
+				start,
+				target,
+				false
+			);
 		} else {
 			generator = getMazeAlgo(mazeType)(
 				elements.length,
@@ -312,7 +319,13 @@ export default function useAlgo(mainRef) {
 	const generateInstant = () => {
 		let generator;
 		if (generating === "path") {
-			generator = dijkstra(elements, cols, start, target, true);
+			generator = getSearchAlgo(searchType)(
+				elements,
+				cols,
+				start,
+				target,
+				true
+			);
 		} else {
 			generator = getMazeAlgo(mazeType)(
 				elements.length,
@@ -369,6 +382,12 @@ export default function useAlgo(mainRef) {
 		}
 	}, [cols, rows, reset]);
 
+	useEffect(() => {
+		if (pathVisible) {
+			generateInstant();
+		}
+	}, [searchType]);
+
 	return updateElements(elements);
 }
 
@@ -412,5 +431,21 @@ const getMazeAlgo = (mazeType) => {
 			return wilsonMaze;
 		default:
 			return depthFirstSearchMaze;
+	}
+};
+const getSearchAlgo = (searchType) => {
+	switch (searchType) {
+		case "A*":
+			return aStar;
+		case "Dijkstra":
+			return dijkstra;
+		case "Greedy":
+			return greedy;
+		case "Depth First":
+			return depthFirst;
+		case "Breadth First":
+			return breadthFirst;
+		default:
+			return aStar;
 	}
 };

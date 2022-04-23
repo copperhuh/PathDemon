@@ -10,6 +10,7 @@ import {
 	doSetVisualizationOngoing,
 	doSetReset,
 	doChangeMazeType,
+	doChangeSearchType,
 } from "../../redux/Actions";
 import { connect } from "react-redux";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
@@ -26,11 +27,13 @@ function Sidebar({
 	reset,
 	changeSize,
 	changeMazeType,
+	changeSearchType,
 }) {
 	const [settings, setSettings] = useState({
 		size: 50,
 		delay: 50,
 		mazeType: "DFS",
+		searchType: "A*",
 	});
 
 	const delayRef = useRef(null);
@@ -53,6 +56,8 @@ function Sidebar({
 			changeSize(e.target.value);
 		} else if (e.target.name === "mazeType") {
 			changeMazeType(e.target.value);
+		} else if (e.target.name === "searchType") {
+			changeSearchType(e.target.value);
 		}
 	};
 
@@ -139,6 +144,28 @@ function Sidebar({
 				</FormControl>
 			</div>
 			<div className="sidebar-element">
+				<FormControl fullWidth>
+					<InputLabel className="label" id="select-label">
+						SEARCH ALGORITHM
+					</InputLabel>
+					<Select
+						labelId="select-label"
+						className="select"
+						value={settings.searchType}
+						name={"searchType"}
+						onChange={handleChange}
+					>
+						<MenuItem value={"A*"}>A*</MenuItem>
+						<MenuItem value={"Dijkstra"}>Dijkstra</MenuItem>
+						<MenuItem value={"Greedy"}>Greedy</MenuItem>
+						<MenuItem value={"Depth First"}>Depth First</MenuItem>
+						<MenuItem value={"Breadth First"}>
+							Breadth First
+						</MenuItem>
+					</Select>
+				</FormControl>
+			</div>
+			<div className="sidebar-element">
 				<button
 					ref={skipRef}
 					value={false}
@@ -172,6 +199,7 @@ const Actions = (dispatch) => ({
 	setSkipRef: (bool) => dispatch(doSetSkipRef(bool)),
 	setReset: (bool) => dispatch(doSetReset(bool)),
 	changeMazeType: (mazeType) => dispatch(doChangeMazeType(mazeType)),
+	changeSearchType: (searchType) => dispatch(doChangeSearchType(searchType)),
 	setVisualizationOngoing: (visualizationOngoing) =>
 		dispatch(doSetVisualizationOngoing(visualizationOngoing)),
 });
