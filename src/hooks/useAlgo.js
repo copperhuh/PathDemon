@@ -10,12 +10,13 @@ import {
 	doSetVisualizationOngoing,
 } from "../redux/Actions";
 import Node from "../components/Grid/Node";
-import aStar from "../maze_solvers/aStar";
+import aStar from "../path_generators/aStar";
 import kruskalMaze from "../maze_generators/kruskalMaze";
 import primMaze from "../maze_generators/primMaze";
 import aldousBroderMaze from "../maze_generators/aldousBroderMaze";
 import wilsonMaze from "../maze_generators/wilsonMaze";
 import recursiveDivisionMaze from "../maze_generators/recursiveDivisionMaze";
+import depthFirst from "../path_generators/depthFirst";
 
 export default function useAlgo(mainRef) {
 	const size = useSelector((state) => state.size);
@@ -269,15 +270,8 @@ export default function useAlgo(mainRef) {
 	const generate = async () => {
 		let generator;
 		if (generating === "path") {
-			generator = aStar(elements, cols, start, target, false);
+			generator = depthFirst(elements, cols, start, target, false);
 		} else {
-			// generator = depthFirstSearchMaze(
-			// 	elements.length,
-			// 	cols,
-			// 	start,
-			// 	target,
-			// 	false
-			// );
 			generator = getMazeAlgo(mazeType)(
 				elements.length,
 				cols,
@@ -314,7 +308,7 @@ export default function useAlgo(mainRef) {
 	const generateInstant = () => {
 		let generator;
 		if (generating === "path") {
-			generator = aStar(elements, cols, start, target, true);
+			generator = depthFirst(elements, cols, start, target, true);
 		} else {
 			generator = getMazeAlgo(mazeType)(
 				elements.length,
