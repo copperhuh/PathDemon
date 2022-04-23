@@ -7,3 +7,4 @@ export const SET_PATH_VISIBLE = "SET_PATH_VISIBLE";
 export const SET_SKIP_REF = "SET_SKIP_REF";
 export const SET_RESET = "SET_RESET";
 export const CHANGE_MAZE_TYPE = "CHANGE_MAZE_TYPE";
+export const CHANGE_SEARCH_TYPE = "CHANGE_SEARCH_TYPE";

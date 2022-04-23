@@ -8,6 +8,7 @@ import {
 	SET_SKIP_REF,
 	SET_RESET,
 	CHANGE_MAZE_TYPE,
+	CHANGE_SEARCH_TYPE,
 } from "../action-types";
 
 export const doChangeSize = (size) => ({
@@ -48,4 +49,8 @@ export const doSetReset = (bool) => ({
 export const doChangeMazeType = (mazeType) => ({
 	type: CHANGE_MAZE_TYPE,
 	payload: mazeType,
+});
+export const doChangeSearchType = (searchType) => ({
+	type: CHANGE_SEARCH_TYPE,
+	payload: searchType,
 });

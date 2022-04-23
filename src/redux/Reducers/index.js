@@ -8,6 +8,7 @@ import {
 	SET_SKIP_REF,
 	SET_RESET,
 	CHANGE_MAZE_TYPE,
+	CHANGE_SEARCH_TYPE,
 } from "../action-types";
 
 const initialState = {
@@ -23,6 +24,7 @@ const initialState = {
 	skipRef: false,
 	reset: false,
 	mazeType: "DFS",
+	searchType: "A*",
 };
 
 export const reducer = (state = initialState, action) => {
@@ -65,6 +67,11 @@ export const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				mazeType: action.payload,
+			};
+		case CHANGE_SEARCH_TYPE:
+			return {
+				...state,
+				searchType: action.payload,
 			};
 
 		default:
