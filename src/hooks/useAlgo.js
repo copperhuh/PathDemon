@@ -341,6 +341,7 @@ export default function useAlgo(mainRef) {
 			dispatch(doSetReset(false));
 			return;
 		}
+		let final;
 		while (true) {
 			const out = generator.next();
 			if (out.done === true) {
@@ -350,8 +351,9 @@ export default function useAlgo(mainRef) {
 				}
 				break;
 			}
-			setElements(out.value);
+			final = out.value;
 		}
+		setElements(final);
 	};
 
 	useEffect(() => {

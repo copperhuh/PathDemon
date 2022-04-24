@@ -10,11 +10,12 @@ const InfoModalStyled = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	z-index: 10;
 	.modal-bg {
-		padding: 0.5rem 5rem 1rem;
+		padding: 2rem 5rem;
 		width: min(900px, 95%);
 		max-height: 99vh;
-		background: ${(props) => props.theme.colors.dark};
+		background: ${(props) => props.theme.colors.secondary};
 		position: relative;
 		display: flex;
 		flex-direction: column;
@@ -36,7 +37,7 @@ const InfoModalStyled = styled.div`
 	}
 	.close-modal {
 		background: none;
-		color: ${(props) => props.theme.colors.main};
+		color: ${(props) => props.theme.colors.light};
 		border: none;
 		position: absolute;
 		top: 1rem;
@@ -45,43 +46,89 @@ const InfoModalStyled = styled.div`
 			transform: scale(1.3);
 		}
 	}
-	p {
-		line-height: 1.6;
-		margin: 0;
-	}
+
 	h3 {
 		text-align: center;
 		font-size: 2rem;
-	}
-	h4 {
-		font-size: 1.3rem;
-		padding: 0;
-		margin: 2rem 0 0.4rem;
-	}
-	.center {
-		text-align: center;
-		margin: 0;
-	}
-	.margin-top {
-		margin-top: 2rem;
-	}
-	.bold,
-	.center {
-		font-weight: 600;
-		color: ${(props) => props.theme.colors.main};
-	}
-	h4,
-	h3,
-	.center {
 		text-transform: uppercase;
 	}
 
-	@media (max-width: 500px) {
+	.legend {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		align-items: center;
+	}
+
+	.legend-section {
+		display: flex;
+		text-transform: uppercase;
+		justify-content: center;
+		align-items: center;
+		margin: 2rem 2rem;
+		width: fit-content;
+		font-weight: 600;
+		font-size: 1.2rem;
+	}
+
+	.node {
+		flex-shrink: 0;
+		height: 3rem;
+		width: 3rem;
+		margin: 0 2rem;
+		border-radius: 10%;
+		font-size: 10px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.empty {
+		background: ${(props) => props.theme.colors.light};
+	}
+
+	.wall {
+		background: #39423f;
+	}
+	.queued {
+		background: ${(props) => props.theme.colors.accent};
+	}
+	.visited {
+		background: #bd9f5c;
+	}
+	.path {
+		background: #664870;
+	}
+	.start {
+		background: #664870;
+	}
+	.target {
+		background: #664870;
+	}
+
+	@media (max-width: 980px) {
 		.modal-bg {
-			padding: 0.5rem 3rem 5rem;
+			padding: 2rem;
 		}
-		p {
-			font-size: 0.8rem;
+	}
+	@media (max-width: 810px) {
+		.legend {
+			grid-template-columns: 1fr;
+			width: fit-content;
+		}
+		.legend-section {
+			margin: 1.2rem;
+		}
+		.modal-bg {
+			align-items: center;
+			max-width: fit-content;
+		}
+	}
+	@media (max-width: 330px) {
+		.legend-section {
+			margin: 1rem 0.5rem;
+		}
+		.node {
+			margin-left: 0;
 		}
 	}
 `;

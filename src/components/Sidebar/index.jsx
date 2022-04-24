@@ -14,6 +14,7 @@ import {
 } from "../../redux/Actions";
 import { connect } from "react-redux";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import AlgoModal from "./AlgoModal";
 
 function Sidebar({
 	visualizationOngoing,
@@ -35,6 +36,7 @@ function Sidebar({
 		mazeType: "DFS",
 		searchType: "A*",
 	});
+	const [algoModalOpen, setAlgoModalOpen] = useState(false);
 
 	const delayRef = useRef(null);
 	const skipRef = useRef(null);
@@ -100,6 +102,7 @@ function Sidebar({
 					aria-label="delay"
 				/>
 			</div>
+			<div className="spacing"></div>
 			<div className="sidebar-element">
 				<FormControl fullWidth>
 					<InputLabel className="label" id="select-label">
@@ -133,6 +136,7 @@ function Sidebar({
 					GENERATE MAZE
 				</button>
 			</div>
+			<div className="spacing"></div>
 			<div className="sidebar-element">
 				<FormControl fullWidth>
 					<InputLabel className="label" id="select-label">
@@ -165,6 +169,7 @@ function Sidebar({
 					GENERATE PATH
 				</button>
 			</div>
+			<div className="spacing"></div>
 
 			<div className="sidebar-element">
 				<button
@@ -188,6 +193,15 @@ function Sidebar({
 					CLEAR GRID
 				</button>
 			</div>
+			<div className="sidebar-element">
+				<button
+					className="large"
+					onClick={() => setAlgoModalOpen(true)}
+				>
+					ALGORITHM <span>INFO</span>
+				</button>
+			</div>
+			<AlgoModal open={algoModalOpen} setOpen={setAlgoModalOpen} />
 		</StyledSidebar>
 	);
 }

@@ -75,12 +75,16 @@ const GlobalStyles = createGlobalStyle`
     height: 100%;
     width: 100%;
   }
-  /* ::-moz-selection {
+  @media (max-width: 720px) {
+    html{
+      font-size: 14px;
+    }
   }
-  ::-webkit-selection {
+  @media (max-width: 630px) {
+    html{
+      font-size: 12px;
+    }
   }
-  ::selection {
-  } */
 `;
 
 function App() {

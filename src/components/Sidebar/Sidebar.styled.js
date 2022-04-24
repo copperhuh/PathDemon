@@ -44,6 +44,16 @@ const StyledSidebar = styled.div`
 			background: #807e7a;
 			color: #3b4540;
 		}
+		span {
+			display: block;
+		}
+	}
+	.large {
+		padding: 1.5rem 0;
+		line-height: 1.4;
+	}
+	.spacing {
+		height: 1rem;
 	}
 	.select {
 		font-family: ${(props) => props.theme.fonts.main};

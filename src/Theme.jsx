@@ -12,7 +12,7 @@ const theme = {
 	fonts: { main: "'Montserrat', sans-serif" },
 };
 
-const Theme = ({ children, variation }) => {
+const Theme = ({ children }) => {
 	return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 };
 

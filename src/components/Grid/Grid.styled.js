@@ -53,7 +53,7 @@ const StyledGrid = styled.div`
 	.start-transition,
 	.target-transition {
 		background: ${(props) => props.theme.colors.light};
-		color: black;
+		color: ${(props) => props.theme.colors.light};
 	}
 
 	.wall {
