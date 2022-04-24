@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import Header from "./components/Header";
 import Main from "./components/Main";
+import Footer from "./components/Footer";
 import Theme from "./Theme";
 import { Provider } from "react-redux";
 import { store } from "./redux/Store";
@@ -40,9 +41,11 @@ const GlobalStyles = createGlobalStyle`
       width: 10px;
     }
     &::-webkit-scrollbar-track{
+      background: ${(props) => props.theme.colors.secondary};
     }
     &::-webkit-scrollbar-thumb{
       width: 7px;
+      background: ${(props) => props.theme.colors.light};
       border-radius: 5px;
     }
   }
@@ -51,12 +54,12 @@ const GlobalStyles = createGlobalStyle`
     background: ${(props) => props.theme.colors.primary};
     .MuiMenuItem-root {
       font-family: ${(props) => props.theme.fonts.main};
-      color: ${(props) => props.theme.colors.accent};
+      color: ${(props) => props.theme.colors.light};
       font-weight: 600;
       transition: all 0.2s;
 
       :hover{
-        background: ${(props) => props.theme.colors.accent} !important;
+        background: ${(props) => props.theme.colors.light} !important;
         color: ${(props) => props.theme.colors.primary};
         transition: all 0.2s;
   
@@ -87,6 +90,7 @@ function App() {
 				<GlobalStyles />
 				<Header />
 				<Main />
+				<Footer />
 			</Provider>
 		</Theme>
 	);

@@ -4,7 +4,7 @@ const StyledSidebar = styled.div`
 	width: 15rem !important;
 	flex-shrink: 0;
 	background: ${(props) => props.theme.colors.primary};
-	color: ${(props) => props.theme.colors.accent};
+	color: ${(props) => props.theme.colors.light};
 	padding: 2rem;
 	font-weight: 700;
 	font-size: 1.1rem;
@@ -18,7 +18,7 @@ const StyledSidebar = styled.div`
 	.slider {
 		/* width: 50%; */
 		margin-top: 0.3rem;
-		color: ${(props) => props.theme.colors.accent};
+		color: ${(props) => props.theme.colors.light};
 		& .MuiSlider-thumb {
 			box-shadow: none !important;
 		}
@@ -32,23 +32,23 @@ const StyledSidebar = styled.div`
 		font-size: 1rem;
 		padding: 0.7rem 0;
 		width: 100%;
-		background: ${(props) => props.theme.colors.accent};
+		background: ${(props) => props.theme.colors.light};
 		color: ${(props) => props.theme.colors.secondary};
 		border: none;
 		font-weight: 600;
 		:hover {
 			background: ${(props) => props.theme.colors.secondary};
-			color: ${(props) => props.theme.colors.accent};
+			color: ${(props) => props.theme.colors.light};
 		}
 		:disabled {
-			background: #6b7d74;
+			background: #807e7a;
 			color: #3b4540;
 		}
 	}
 	.select {
 		font-family: ${(props) => props.theme.fonts.main};
 		color: ${(props) => props.theme.colors.secondary};
-		background: ${(props) => props.theme.colors.accent};
+		background: ${(props) => props.theme.colors.light};
 		border-radius: 0%;
 		border: 0;
 		font-weight: 600;
@@ -57,10 +57,10 @@ const StyledSidebar = styled.div`
 		:hover,
 		:focus {
 			background: ${(props) => props.theme.colors.secondary};
-			color: ${(props) => props.theme.colors.accent};
+			color: ${(props) => props.theme.colors.light};
 			transition: all 0.2s;
 			.MuiSvgIcon-root {
-				color: ${(props) => props.theme.colors.accent};
+				color: ${(props) => props.theme.colors.light};
 			}
 		}
 		.MuiOutlinedInput-notchedOutline {
@@ -69,7 +69,7 @@ const StyledSidebar = styled.div`
 	}
 	.MuiInputLabel-root {
 		font-family: ${(props) => props.theme.fonts.main};
-		color: ${(props) => props.theme.colors.accent} !important;
+		color: ${(props) => props.theme.colors.light} !important;
 		font-weight: 600;
 		top: -20%;
 		left: 8%;

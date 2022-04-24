@@ -101,26 +101,6 @@ function Sidebar({
 				/>
 			</div>
 			<div className="sidebar-element">
-				<button
-					disabled={visualizationOngoing}
-					onClick={() => {
-						handleGenerate("maze");
-					}}
-				>
-					GENERATE MAZE
-				</button>
-			</div>
-			<div className="sidebar-element">
-				<button
-					disabled={visualizationOngoing}
-					onClick={() => {
-						handleGenerate("path");
-					}}
-				>
-					GENERATE PATH
-				</button>
-			</div>
-			<div className="sidebar-element">
 				<FormControl fullWidth>
 					<InputLabel className="label" id="select-label">
 						MAZE ALGORITHM
@@ -144,6 +124,16 @@ function Sidebar({
 				</FormControl>
 			</div>
 			<div className="sidebar-element">
+				<button
+					disabled={visualizationOngoing}
+					onClick={() => {
+						handleGenerate("maze");
+					}}
+				>
+					GENERATE MAZE
+				</button>
+			</div>
+			<div className="sidebar-element">
 				<FormControl fullWidth>
 					<InputLabel className="label" id="select-label">
 						SEARCH ALGORITHM
@@ -165,6 +155,17 @@ function Sidebar({
 					</Select>
 				</FormControl>
 			</div>
+			<div className="sidebar-element">
+				<button
+					disabled={visualizationOngoing}
+					onClick={() => {
+						handleGenerate("path");
+					}}
+				>
+					GENERATE PATH
+				</button>
+			</div>
+
 			<div className="sidebar-element">
 				<button
 					ref={skipRef}
