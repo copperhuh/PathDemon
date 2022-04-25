@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
 const StyledGrid = styled.div`
-	width: calc(100% - 15rem);
+	width: ${(props) => (props.width > 1250 ? "calc(100% - 15rem)" : "100vw")};
 	background: ${(props) => props.theme.colors.secondary};
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	padding: 2.5rem 4rem;
-	height: 100%;
+	min-height: 100%;
 	color: ${(props) => props.theme.colors.light};
 	> * {
 		user-select: none;
@@ -28,8 +28,6 @@ const StyledGrid = styled.div`
 			${(props) => (props.size * 10) / 10}px
 		);
 		gap: 0;
-		/* height: 100%; */
-		/* width: 100%; */
 	}
 	.node {
 		width: 100%;
@@ -75,6 +73,13 @@ const StyledGrid = styled.div`
 	.target {
 		background: #664870;
 		cursor: grab;
+	}
+
+	@media (max-width: 800px) {
+		padding: 2.5rem 2rem;
+	}
+	@media (max-width: 560px) {
+		padding: 2.5rem 0.5rem;
 	}
 `;
 

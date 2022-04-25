@@ -29,6 +29,9 @@ const GlobalStyles = createGlobalStyle`
       transition: all 0.2s;
     }
   }
+  .open-modal-2{
+    overflow: hidden;
+  }
   body {
     margin: 0;
     padding: 0;
@@ -36,7 +39,8 @@ const GlobalStyles = createGlobalStyle`
     width: 100vw;
     /* font-family: 'Montserrat', sans-serif; */
     overflow-x: hidden;
-    
+
+
     &::-webkit-scrollbar{
       width: 10px;
     }

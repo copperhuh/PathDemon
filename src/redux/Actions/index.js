@@ -5,15 +5,20 @@ import {
 	SET_VISUALIZATION_ONGOING,
 	SET_GENERATING,
 	SET_PATH_VISIBLE,
-	SET_SKIP_REF,
+	SET_SKIP,
 	SET_RESET,
 	CHANGE_MAZE_TYPE,
 	CHANGE_SEARCH_TYPE,
+	CHANGE_DELAY,
 } from "../action-types";
 
 export const doChangeSize = (size) => ({
 	type: CHANGE_SIZE,
 	payload: size,
+});
+export const doChangeDelay = (delay) => ({
+	type: CHANGE_DELAY,
+	payload: delay,
 });
 
 export const doSetDelayRef = (ref) => ({
@@ -38,8 +43,8 @@ export const doSetPathVisible = (bool) => ({
 	type: SET_PATH_VISIBLE,
 	payload: bool,
 });
-export const doSetSkipRef = (bool) => ({
-	type: SET_SKIP_REF,
+export const doSetSkip = (bool) => ({
+	type: SET_SKIP,
 	payload: bool,
 });
 export const doSetReset = (bool) => ({

@@ -83,14 +83,13 @@ const AlgoModalStyled = styled.div`
 		font-family: ${(props) => props.theme.fonts.main};
 		color: ${(props) => props.theme.colors.light};
 		background: ${(props) => props.theme.colors.secondary};
-		margin-left: 0.4rem;
 		border-radius: 0%;
 		border: 0;
 		font-weight: 600;
 		width: fit-content;
 		padding: 0 1rem;
 		font-size: 2rem;
-		margin: 0 auto;
+		margin: 1rem auto;
 		text-align: center;
 		transition: all 0.2s;
 		position: relative;
@@ -115,9 +114,52 @@ const AlgoModalStyled = styled.div`
 		width: 100%;
 		height: 100%;
 		display: flex;
+		flex-direction: column;
+		padding: 2rem 5rem;
+		ol {
+			margin: 1rem auto;
+		}
+
+		p,
+		li {
+			line-height: 1.7;
+			margin: 0.6rem 1rem;
+		}
+
+		span {
+			font-weight: 600;
+		}
+		max-height: 80vh;
+		overflow: auto;
+		&::-webkit-scrollbar {
+			width: 10px;
+		}
+		&::-webkit-scrollbar-track {
+			background: ${(props) => props.theme.colors.secondary};
+		}
+		&::-webkit-scrollbar-thumb {
+			width: 7px;
+			background: ${(props) => props.theme.colors.light};
+			border-radius: 5px;
+		}
 	}
 
-	@media (max-width: 980px) {
+	@media (max-width: 700px) {
+		.content {
+			padding: 2rem;
+		}
+	}
+	@media (max-width: 400px) {
+		.content {
+			padding: 0.8rem;
+			/* font-size: 0.85rem; */
+			li {
+				margin: 0.8rem 0;
+			}
+			ol {
+				padding-left: 1.4rem;
+			}
+		}
 	}
 `;
 

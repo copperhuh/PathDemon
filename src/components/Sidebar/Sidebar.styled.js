@@ -2,12 +2,17 @@ import styled from "styled-components";
 
 const StyledSidebar = styled.div`
 	width: 15rem !important;
+	height: 100%;
 	flex-shrink: 0;
 	background: ${(props) => props.theme.colors.primary};
 	color: ${(props) => props.theme.colors.light};
-	padding: 2rem;
+	padding: 1rem 2rem;
 	font-weight: 700;
 	font-size: 1.1rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+
 	.sidebar-element {
 		display: flex;
 		flex-direction: column;
@@ -86,6 +91,10 @@ const StyledSidebar = styled.div`
 	}
 	.MuiFormControl-root {
 		margin-top: 1.2rem;
+	}
+	@media (max-width: 630px) {
+		justify-content: space-around;
+		padding: 2rem 2rem 8rem;
 	}
 `;
 

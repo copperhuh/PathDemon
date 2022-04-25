@@ -3,11 +3,10 @@ import { connect } from "react-redux";
 import useAlgo from "../../hooks/useAlgo";
 import StyledGrid from "./Grid.styled";
 
-function Grid({ size, dimensions, mainRef }) {
+function Grid({ width, size, dimensions, mainRef }) {
 	const elements = useAlgo(mainRef.current);
-
 	return (
-		<StyledGrid size={size} gridDimensions={dimensions}>
+		<StyledGrid width={width} size={size} gridDimensions={dimensions}>
 			<div ref={mainRef} className="flex-container">
 				<div className="container">{elements}</div>
 			</div>

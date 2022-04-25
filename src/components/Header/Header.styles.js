@@ -77,5 +77,10 @@ export const StyledHeader = styled.div`
 		justify-content: space-evenly;
 		align-items: center;
 		height: 15%;
+		padding-bottom: 2rem;
+	}
+	@media (max-width: 380px) {
+		height: 18%;
+		padding-bottom: 3rem;
 	}
 `;

@@ -23,6 +23,7 @@ import dijkstra from "../path_generators/dijkstra";
 
 export default function useAlgo(mainRef) {
 	const size = useSelector((state) => state.size);
+	const delay = useSelector((state) => state.delay);
 	const cols = useSelector((state) => state.dimensions.cols);
 	const rows = useSelector((state) => state.dimensions.rows);
 	const delayRef = useSelector((state) => state.delayRef);
@@ -31,12 +32,25 @@ export default function useAlgo(mainRef) {
 	);
 	const generating = useSelector((state) => state.generating);
 	const pathVisible = useSelector((state) => state.pathVisible);
-	const skipRef = useSelector((state) => state.skipRef);
+	const skip = useSelector((state) => state.skip);
 	const reset = useSelector((state) => state.reset);
 	const mazeType = useSelector((state) => state.mazeType);
 	const searchType = useSelector((state) => state.searchType);
 
 	const dispatch = useDispatch();
+
+	const [generatorVars, setGeneratorVars] = useState({
+		delay,
+		skip: "false",
+	});
+
+	useEffect(() => {
+		generatorVars.delay = delay;
+	}, [delay]);
+
+	useEffect(() => {
+		generatorVars.skip = skip;
+	}, [skip]);
 
 	const [elements, setElements] = useState([]);
 	const [start, setStart] = useState(null);
@@ -270,7 +284,7 @@ export default function useAlgo(mainRef) {
 		},
 		{}
 	);
-
+	// console.log(delay);
 	const generate = async () => {
 		let generator;
 		if (generating === "path") {
@@ -290,14 +304,14 @@ export default function useAlgo(mainRef) {
 				false
 			);
 		}
-
 		while (true) {
-			if (skipRef.current.value === "true") {
+			if (generatorVars.skip === true) {
 				generateInstant();
-				skipRef.current.value = "false";
+				dispatch(doSetSkip(false));
 				return;
 			}
-			await sleep(parseInt(delayRef.current.textContent));
+
+			await sleep(generatorVars.delay);
 
 			if (resetRef.current === true) {
 				dispatch(doSetVisualizationOngoing(false));

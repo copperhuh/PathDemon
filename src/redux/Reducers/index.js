@@ -5,14 +5,16 @@ import {
 	SET_VISUALIZATION_ONGOING,
 	SET_PATH_VISIBLE,
 	SET_GENERATING,
-	SET_SKIP_REF,
+	SET_SKIP,
 	SET_RESET,
 	CHANGE_MAZE_TYPE,
 	CHANGE_SEARCH_TYPE,
+	CHANGE_DELAY,
 } from "../action-types";
 
 const initialState = {
 	size: 50,
+	delay: 50,
 	dimensions: {
 		cols: 0,
 		rows: 0,
@@ -21,7 +23,7 @@ const initialState = {
 	visualizationOngoing: false,
 	generating: "maze",
 	pathVisible: false,
-	skipRef: false,
+	skip: false,
 	reset: false,
 	mazeType: "DFS",
 	searchType: "A*",
@@ -31,6 +33,8 @@ export const reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case CHANGE_SIZE:
 			return { ...state, size: action.payload };
+		case CHANGE_DELAY:
+			return { ...state, delay: action.payload };
 		case SET_DELAY_REF:
 			return { ...state, delayRef: action.payload };
 		case SET_VISUALIZATION_ONGOING:
@@ -53,10 +57,10 @@ export const reducer = (state = initialState, action) => {
 				...state,
 				pathVisible: action.payload,
 			};
-		case SET_SKIP_REF:
+		case SET_SKIP:
 			return {
 				...state,
-				skipRef: action.payload,
+				skip: action.payload,
 			};
 		case SET_RESET:
 			return {
