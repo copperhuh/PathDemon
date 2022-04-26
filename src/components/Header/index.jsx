@@ -21,7 +21,7 @@ export default function Header() {
 		<StyledHeader>
 			<span>PATH DEMON</span>
 			<div className="btns">
-				<a href="https://github.com/copperhuh/SortDemon">
+				<a href="https://github.com/copperhuh/PathDemon">
 					<button>
 						<GitHubIcon sx={{ fontSize: "2.4rem" }} />
 					</button>

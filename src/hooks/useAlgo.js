@@ -26,7 +26,6 @@ export default function useAlgo(mainRef) {
 	const delay = useSelector((state) => state.delay);
 	const cols = useSelector((state) => state.dimensions.cols);
 	const rows = useSelector((state) => state.dimensions.rows);
-	const delayRef = useSelector((state) => state.delayRef);
 	const visualizationOngoing = useSelector(
 		(state) => state.visualizationOngoing
 	);
@@ -60,6 +59,7 @@ export default function useAlgo(mainRef) {
 		pos: null,
 		memoVal: null,
 	});
+
 	const resetRef = useRef(reset);
 	const [special, setSpecial] = useState({ pos: null, val: null });
 	const [gridStart, setGridStart] = useState({
@@ -78,7 +78,9 @@ export default function useAlgo(mainRef) {
 
 	const getIdxFromCoords = (x, y) => {
 		const nodeX = Math.floor((x - gridStart.left) / size);
-		const nodeY = Math.floor((y - gridStart.top) / size);
+		const nodeY = Math.floor(
+			(y - gridStart.top + document.body.scrollTop) / size
+		);
 		return cols * nodeY + nodeX >= elements.length ||
 			cols * nodeY + nodeX < 0 ||
 			x <= gridStart.left ||

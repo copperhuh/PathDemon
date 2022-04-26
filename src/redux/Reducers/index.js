@@ -12,8 +12,27 @@ import {
 	CHANGE_DELAY,
 } from "../action-types";
 
+let initialSize;
+
+switch (true) {
+	case window.width > 1000: {
+		initialSize = 35;
+		break;
+	}
+	case window.width > 550: {
+		initialSize = 25;
+		break;
+	}
+	case window.width > 200: {
+		initialSize = 20;
+		break;
+	}
+	default:
+		initialSize = 35;
+}
+
 const initialState = {
-	size: 50,
+	size: initialSize,
 	delay: 50,
 	dimensions: {
 		cols: 0,

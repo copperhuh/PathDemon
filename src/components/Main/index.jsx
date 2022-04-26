@@ -7,7 +7,7 @@ import StyledMain from "./Main.styled";
 import MenuIcon from "@mui/icons-material/Menu";
 import HiddenSidebar from "../Sidebar/HiddenSidebar";
 
-function Main({ size, changeDimensions, changeSize }) {
+function Main({ size, changeDimensions }) {
 	const mainRef = useRef(null);
 
 	const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -57,30 +57,6 @@ function Main({ size, changeDimensions, changeSize }) {
 		return () => window.removeEventListener("resize", updateWidth);
 	}, [dimensions.width]);
 
-	useEffect(() => {
-		updateGrid();
-	}, [size]);
-
-	useEffect(() => {
-		console.log(width);
-		switch (true) {
-			case width > 1000: {
-				changeSize(35);
-				break;
-			}
-			case width > 550: {
-				changeSize(25);
-				break;
-			}
-			case width > 200: {
-				changeSize(20);
-				break;
-			}
-			default:
-				changeSize(3);
-		}
-	}, []);
-
 	return (
 		<StyledMain>
 			{width > 1250 ? (
@@ -100,7 +76,6 @@ function Main({ size, changeDimensions, changeSize }) {
 
 const Actions = (dispatch) => ({
 	changeDimensions: (cols, rows) => dispatch(doChangeDimensions(cols, rows)),
-	changeSize: (size) => dispatch(doChangeSize(size)),
 });
 
 const Props = (state) => ({
