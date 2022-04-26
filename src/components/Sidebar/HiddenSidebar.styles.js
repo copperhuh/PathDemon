@@ -12,6 +12,7 @@ const HiddenSidebarStyled = styled.div`
 		height: 100%;
 		width: fit-content;
 		overflow: auto;
+		overflow-x: hidden;
 		background: ${(props) => props.theme.colors.primary};
 		/* padding-right: 1.5rem; */
 		position: relative;

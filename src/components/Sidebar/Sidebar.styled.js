@@ -11,7 +11,7 @@ const StyledSidebar = styled.div`
 	font-size: 1.1rem;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: space-around;
 
 	.sidebar-element {
 		display: flex;
