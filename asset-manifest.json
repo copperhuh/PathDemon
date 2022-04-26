@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/PathDemon/static/js/main.536425f7.js",
+    "main.js": "/PathDemon/static/js/main.7cc23b8c.js",
     "static/js/787.ab4fce9e.chunk.js": "/PathDemon/static/js/787.ab4fce9e.chunk.js",
     "index.html": "/PathDemon/index.html",
-    "main.536425f7.js.map": "/PathDemon/static/js/main.536425f7.js.map",
+    "main.7cc23b8c.js.map": "/PathDemon/static/js/main.7cc23b8c.js.map",
     "787.ab4fce9e.chunk.js.map": "/PathDemon/static/js/787.ab4fce9e.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.536425f7.js"
+    "static/js/main.7cc23b8c.js"
   ]
 }
