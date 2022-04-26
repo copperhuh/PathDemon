@@ -41,7 +41,7 @@ export default function useAlgo(mainRef) {
 
 	const [generatorVars, setGeneratorVars] = useState({
 		delay,
-		skip: "false",
+		skip: false,
 	});
 
 	useEffect(() => {
@@ -284,7 +284,7 @@ export default function useAlgo(mainRef) {
 		},
 		{}
 	);
-	// console.log(delay);
+
 	const generate = async () => {
 		let generator;
 		if (generating === "path") {
