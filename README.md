@@ -1,70 +1,192 @@
-# Getting Started with Create React App
+![Screenshot 1](https://github.com/copperhuh/PathDemon/blob/master/screenshots/screenshot-1.png?raw=true)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# PATH DEMON - Visualizer of Maze Generation and Pathfinding Algorithms
 
-## Available Scripts
+A website that is a visualizer of over 30 unique sorting algorithms, allowing for custom delay time and input array size. Its purpose is to be a handy tool for learning the concept of sorting algorithms, as well as to highlight the fact that, in computer science, such rudimentary task as sorting an array can be performed in so many different ways. This is a personal project of mine with which I wanted to test my React, Redux, and Styled Components skills.
 
-In the project directory, you can run:
+## Demo
 
-### `npm start`
+[Github Pages](https://copperhuh.github.io/PathDemon/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+![Screenshot 2](https://github.com/copperhuh/PathDemon/blob/master/screenshots/screenshot-2.png?raw=true)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Table of Contents
 
-### `npm test`
+-   [Technologies](#Technologies)
+-   [Run Locally](#Run-Locally)
+-   [How It Works](#How-It-Works)
+-   [Inspiration](#Inspiration)
+-   [Appendix](#Appendix)
+-   [Author](#Author)
+-   [Feedback](#Feedback)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Technologies
 
-### `npm run build`
+#### Main
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+-   **React**
+-   **Redux** (with react-redux)
+-   **Styled Components**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### Other
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+-   **Material UI** (icons and slider component)
+-   **Framer Motion** (animating responsive sidebars and modals)
+-   **react-animate-height** (animating collapsable list elements)
+-   **react-code-blocks** (code snippet component in descriptions)
+-   **Create React App** (initial project template)
+-   **Github Pages** (hosting demo)
 
-### `npm run eject`
+## Run Locally
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Clone the project
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+  git clone https://github.com/copperhuh/PathDemon
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Go to the project directory
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+  cd PathDemon
+```
 
-## Learn More
+Install dependencies
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+  npm install
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Start the server
 
-### Code Splitting
+```bash
+  npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## How It Works
 
-### Analyzing the Bundle Size
+Since I am quite proud of how the visualization feature was implemented, I will explain how it works the best that I can.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+To put it plainly, all logic takes place in a custom **hook**, that calls an **async function** that yields from a **generator function** specific to the chosen sorting algorithm.
 
-### Making a Progressive Web App
+### The Generator
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Each sorting algorithm has its **own generator** function. I will explain how they work on **bubble sort**.
 
-### Advanced Configuration
+All generators take in the `items` array and `arrMax` which is a number that represents the maximum value in the array (it is needed to determine the height of the bars). `items` is an array of objects from which we get the starting unsorted array. Each element is an object in the form of `{ val: <number>, active: <boolean> }`. `val` is just a natural number, which we refer to when sorting. `active` represents whether or not the bar should be green (implying focus).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```javascript
+export default function* bubbleSort(items, arrMax) {
+	let i = 0;
+	let j = 0;
+	let arr = JSON.parse(JSON.stringify(items));
 
-### Deployment
+	while (i < arr.length) {
+		j = 0;
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+		arr[i].active = true;
+		arr[j].active = true;
 
-### `npm run build` fails to minify
+		while (j < arr.length - 1) {
+			if (arr[j].val > arr[j + 1].val) {
+				[arr[j].val, arr[j + 1].val] = [arr[j + 1].val, arr[j].val];
+			}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+			if (j !== i) arr[j].active = false;
+
+			j++;
+
+			arr[j].active = true;
+			if (j + 1 !== arr.length) arr[j + 1].active = true;
+
+			yield newElements(arr, arrMax);
+		}
+
+		arr[j].active = false;
+		arr[i].active = false;
+
+		i++;
+
+		if (i !== arr.length) arr[i].active = true;
+
+		yield newElements(arr, arrMax);
+	}
+}
+```
+
+Immediately at the beginning, we do a hard copy of `items` array, because the variable is shared by all visualizations, and so we can’t modify it.
+
+We then start the sorting process and, whenever we deem appropriate, we yield how the copied array currently looks. We yield the value returned by the `newElements` function because it returns **jsx** elements based on the array that should be put on screen.
+
+```javascript
+export default function newElements(items, max) {
+	return (
+		<>
+			{items.map((el, inx) => {
+				return (
+					<div
+						key={inx}
+						className="node-container"
+						style={{ width: `calc(${(1 / max) * 100}% )` }}
+					>
+						<div
+							className={`node-coloured ${
+								el.active ? "active" : null
+							}`}
+							style={{ height: `${(el.val * 100) / max}%` }}
+						></div>
+					</div>
+				);
+			})}
+		</>
+	);
+}
+```
+
+With bubble sort, we want to show a new array whenever `i` or `j` variable is changed. We want to change the corresponding to them element’s `active` value to true, to show that the algorithm “looks” at them. We also change `j + 1` element’s `active` value to true because, in bubble sort, we compare element `j` with element `j + 1`.
+
+### The Async Function
+
+The async function is just a loop that calls a `sleep` function for the amount of time set by the user, **sets the state** value to what the generator yields and **breaks** the loop when the generator is done. The state that the function sets is the value **returned by the hook** and which is subsequently shown directly on the screen.
+
+```javascript
+async function getEls() {
+	while (true) {
+		await sleep(speedRef.current);
+
+		const elsObj = elsGenerator.next();
+
+		if (elsObj.done) {
+			break;
+		}
+
+		setElements(elsObj);
+	}
+}
+```
+
+## Inspiration
+
+-   [Pushing Sorts to their Limits](https://www.youtube.com/watch?v=8MsTNqK3o_w&t=1271s)
+
+This video was a major inspiration for how to visualize the algorithms and was also the place from which I picked the algorithms that I want to implement. I wanted to include the algorithms that were visually interesting and since the video shows what my end visualization will look like, the choosing process was considerably easier.
+
+## Appendix
+
+SORT DEMON is a visualizer of sorting algorithms. It is meant to be used as a tool for learning **how the algorithms act and how they contrast from one another**. I did **not** design it to accurately show the relative speed of the algorithms, since I deemed it would make the faster algorithms less “readable”. Please keep that in mind while using the site.
+
+### About Algorithms
+
+There can be up to 9 algorithms running at the same time. If after adding a new algorithm, only its name appears, just click the **reset** or **shuffle** button to show it entirely. Also, note that **removing an algorithm in the middle of the runtime** can lead to some strange behavior that is also easily fixed with a **reset** or **shuffle**. Another thing - the more structurally complex algorithms (like the ones using recursion) have to **run in their entirety** before recreating their steps on the screen. I say that because that initial run in the background can lead to a **slight lag** when starting the visualization with a **large array size** and **multiple of these complex algorithms**.
+
+### About Descriptions
+
+**I do not take credit for any of the descriptions’ contents** - proper sources are linked at the bottom of each description. This is a **personal project** - the description functionality is just a feature that I thought would be nice to implement and thought that authentic articles would look better than some Lorem Ipsum boilerplate text. I strongly recommend everyone to visit the websites from which I go the articles - all of them are great resources for learning computer science-related topics.
+
+## Author
+
+-   [Jakub Koper](https://github.com/copperhuh)
+
+## Feedback
+
+If you have any feedback, please reach out to me jakub.koper@wpc-huh.com
