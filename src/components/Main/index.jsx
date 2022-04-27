@@ -57,6 +57,10 @@ function Main({ size, changeDimensions }) {
 		return () => window.removeEventListener("resize", updateWidth);
 	}, [dimensions.width]);
 
+	useEffect(() => {
+		updateGrid();
+	}, [size]);
+
 	return (
 		<StyledMain>
 			{width > 1250 ? (

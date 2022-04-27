@@ -14,7 +14,7 @@ const InfoModalStyled = styled.div`
 	.modal-bg {
 		padding: 2rem 5rem;
 		width: min(900px, 95%);
-		max-height: 99vh;
+		max-height: 95vh;
 		background: ${(props) => props.theme.colors.secondary};
 		position: relative;
 		display: flex;

@@ -5,6 +5,7 @@ import StyledGrid from "./Grid.styled";
 
 function Grid({ width, size, dimensions, mainRef }) {
 	const elements = useAlgo(mainRef.current);
+
 	return (
 		<StyledGrid width={width} size={size} gridDimensions={dimensions}>
 			<div ref={mainRef} className="flex-container">
