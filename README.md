@@ -85,7 +85,7 @@ On the other hand, with the use of the useDrag hook, we can very easily have our
 
 -   [Pathfinding Visualizer](https://clementmihailescu.github.io/Pathfinding-Visualizer/)
 
-These site was a major inspiration for this project, as well as a place from which I got ideas for many of the features present. My main goal was to build on this by making the grid resizable and responsive, making the visualization speed changeable mid-visualization, making manually creating walls smoother, and including the maze generation algorithms. 
+This site was a major inspiration for this project, as well as a place from which I got ideas for many of the features present. My main goal was to build on this by making the grid resizable and responsive, making the visualization speed changeable mid-visualization, making manually creating walls smoother, and including the maze generation algorithms. 
 
 Also, I want to specify, that this project is not based on any tutorials (I know that the creator of the first site made one, but I didn't want to watch it) and so all of the code, as well as the solutions to all of the problems, are original and I want to take credit for them. I'm saying that, because I don't want anyone to think that I simply ripped off someone's code - I know that the project idea is not totally original, but I assure everyone that this is my own, honest take on it.
 
