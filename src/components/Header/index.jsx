@@ -1,6 +1,4 @@
 import { StyledHeader } from "./Header.styles";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import LightModeIcon from "@mui/icons-material/LightMode";
 import InfoIcon from "@mui/icons-material/Info";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { useState, useEffect } from "react";

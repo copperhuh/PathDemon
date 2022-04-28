@@ -3,7 +3,6 @@ import { useDrag } from "@use-gesture/react";
 import depthFirstSearchMaze from "../maze_generators/depthFirstSearchMaze";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	doSetGenerating,
 	doSetPathVisible,
 	doSetReset,
 	doSetSkip,
@@ -147,7 +146,6 @@ export default function useAlgo(mainRef) {
 				...prevElements.slice(currentNode + 1),
 			]);
 		}
-		// if (pathVisible) generateInstant();
 	}, {});
 	const bindSpecial = useDrag(
 		({ canceled, buttons, cancel, down, xy: [x, y] }) => {
@@ -217,14 +215,11 @@ export default function useAlgo(mainRef) {
 					pos: currentNode,
 					memoVal: null,
 				});
-				//
 				setElements((prevElements) => [
 					...prevElements.slice(0, currentNode),
 					elements[currentNode] + "-transition",
 					...prevElements.slice(currentNode + 1),
 				]);
-				//
-				// if (pathVisible) generateInstant();
 			}
 			if (
 				currentNode === null ||

@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { doChangeDimensions, doChangeSize } from "../../redux/Actions";
+import { doChangeDimensions } from "../../redux/Actions";
 import Grid from "../Grid";
 import Sidebar from "../Sidebar";
 import StyledMain from "./Main.styled";

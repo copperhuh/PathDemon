@@ -37,7 +37,6 @@ const GlobalStyles = createGlobalStyle`
     padding: 0;
     height: 100vh;
     width: 100vw;
-    /* font-family: 'Montserrat', sans-serif; */
     overflow-x: hidden;
 
 

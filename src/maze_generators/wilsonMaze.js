@@ -73,7 +73,6 @@ function* wilsonMaze(leng, cols, startPos, targetPos, instant) {
 		}
 		if (!instant) yield els.map((el) => el.status);
 
-		// console.log(branch, unvisited);
 		if (els[neighbors[randomNeighbor]].visited === true) {
 			for (let each of branch) {
 				if (cells[each] !== null && els[each].visited === false) {

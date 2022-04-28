@@ -89,7 +89,6 @@ export default function* greedy(nodes, cols, startPos, targetPos, instant) {
 		openSetEls.splice(openSetEls.indexOf(current), 1);
 		els[current].visited = true;
 
-		console.log(openSetEls.length, openSet.length);
 		if (current === targetPos) {
 			path = [current];
 			while (cameFrom[current] !== null) {

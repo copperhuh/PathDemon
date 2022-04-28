@@ -78,8 +78,6 @@ export default function* dijkstra(nodes, cols, startPos, targetPos, instant) {
 		openSetEls.splice(openSetEls.indexOf(current), 1);
 		els[current].visited = true;
 
-		console.log(current, gScore[current]);
-
 		if (current === targetPos) {
 			path = [current];
 			while (cameFrom[current] !== null) {
@@ -99,7 +97,6 @@ export default function* dijkstra(nodes, cols, startPos, targetPos, instant) {
 		) {
 			els[current].status = "visited";
 			changed = true;
-			// yield els.map((el) => el.status);
 		}
 
 		for (let neighbor of els[current].neighbors) {
@@ -113,7 +110,6 @@ export default function* dijkstra(nodes, cols, startPos, targetPos, instant) {
 					openSet.queue(neighbor);
 					openSetEls.push(neighbor);
 
-					// console.log(neighbor, gScore[neighbor]);
 					if (
 						neighbor !== startPos &&
 						neighbor !== targetPos &&

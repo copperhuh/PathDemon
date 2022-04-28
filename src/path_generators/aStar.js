@@ -100,7 +100,6 @@ export default function* aStar(nodes, cols, startPos, targetPos, instant) {
 		) {
 			els[current].status = "visited";
 			changed = true;
-			// yield els.map((el) => el.status);
 		}
 
 		for (let neighbor of els[current].neighbors) {

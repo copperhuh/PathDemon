@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import StyledSidebar from "./Sidebar.styled";
 import Slider from "@mui/material/Slider";
 import {

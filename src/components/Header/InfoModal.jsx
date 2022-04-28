@@ -11,7 +11,6 @@ export default function InfoModal({ open, setOpen }) {
 
 	function onClose(e) {
 		if (outside.current === e.target) {
-			console.log("c");
 			setOpen(false);
 		}
 	}

@@ -21,7 +21,6 @@ const StyledSidebar = styled.div`
 		margin: 1rem 0;
 	}
 	.slider {
-		/* width: 50%; */
 		margin-top: 0.3rem;
 		color: ${(props) => props.theme.colors.light};
 		& .MuiSlider-thumb {

@@ -152,7 +152,6 @@ const AlgoModalStyled = styled.div`
 	@media (max-width: 400px) {
 		.content {
 			padding: 0.8rem;
-			/* font-size: 0.85rem; */
 			li {
 				margin: 0.8rem 0;
 			}

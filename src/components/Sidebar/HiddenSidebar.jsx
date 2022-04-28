@@ -5,7 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { motion, AnimatePresence } from "framer-motion";
 import HiddenSidebarStyled from "./HiddenSidebar.styles";
 
-export default function HiddenSidebar({ algorithms, open, setOpen }) {
+export default function HiddenSidebar({ open, setOpen }) {
 	const outside = React.useRef(null);
 
 	function onClose(e) {

@@ -14,7 +14,6 @@ const HiddenSidebarStyled = styled.div`
 		overflow: auto;
 		overflow-x: hidden;
 		background: ${(props) => props.theme.colors.primary};
-		/* padding-right: 1.5rem; */
 		position: relative;
 		display: flex;
 		opacity: 1 !important;

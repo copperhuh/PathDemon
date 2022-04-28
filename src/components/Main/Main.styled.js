@@ -5,12 +5,9 @@ const StyledMain = styled.div`
 	height: fit-content;
 	width: 100%;
 	min-height: 90vh;
-	/* position: relative; */
 	.open-sidebar {
 		height: fit-content;
 		position: absolute;
-		/* top: 22vh; */
-		/* left: 1rem; */
 		padding: 0.3rem 0.5rem;
 		display: flex;
 		align-items: center;

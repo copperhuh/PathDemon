@@ -1,70 +1,107 @@
-# Getting Started with Create React App
+![Screenshot 1](https://github.com/copperhuh/PathDemon/blob/master/screenshots/screenshot-1.png?raw=true)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# PATH DEMON - Visualizer of Maze Generation and Pathfinding Algorithms
 
-## Available Scripts
+A responsive visualizer of maze generation and pathfinding algorithms, allowing for custom delay time and grid size. It’s meant to make the process of understanding maze generation and pathfinding easy and visually interesting.
 
-In the project directory, you can run:
+## Demo
 
-### `npm start`
+[Github Pages](https://copperhuh.github.io/PathDemon/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+![Screenshot 2](https://github.com/copperhuh/PathDemon/blob/master/screenshots/screenshot-2.png?raw=true)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Table of Contents
 
-### `npm test`
+-   [Technologies](#Technologies)
+-   [Run Locally](#Run-Locally)
+-   [How It Works](#How-It-Works)
+-   [Inspiration](#Inspiration)
+-   [Appendix](#Appendix)
+-   [Author](#Author)
+-   [Feedback](#Feedback)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Technologies
 
-### `npm run build`
+#### Main
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+-   **React**
+-   **Redux** (with react-redux)
+-   **Styled Components**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### Other
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+-   **use-gesture** (making grid cells interactive)
+-   **Material UI** (icons, slider component, select component)
+-   **Framer Motion** (animating responsive sidebar and modals)
+-   **Create React App** (initial project template)
+-   **Github Pages** (hosting demo)
 
-### `npm run eject`
+## Run Locally
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Clone the project
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+  git clone https://github.com/copperhuh/PathDemon
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Go to the project directory
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+  cd PathDemon
+```
 
-## Learn More
+Install dependencies
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+  npm install
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Start the server
 
-### Code Splitting
+```bash
+  npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## How It Works
 
-### Analyzing the Bundle Size
+### Visualizing Algorithms' Steps
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+In short, each algorithm is implemented in a generator that mutates the original grid array. Throughout its runtime, the generator yields the mutated grid after a significant change to it was made and we want it reflected on screen, e.g. a wall node was converted to a passage node. The whole generator is operated by an async function, that waits a set amount of milliseconds (set by the delay slider) before getting each new value from the generator.
 
-### Making a Progressive Web App
+I included a more detailed explanation of this entire process in the READ ME of my [previous project](https://github.com/copperhuh/SortDemon), so please check it out if you are interested.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Resizable Grid
 
-### Advanced Configuration
+The container that holds the grid is made to take up the whole width of the page. To calculate the exact number of columns and rows that the grid should comprise, we get the pixel width and height of the grid's container from reference with the useRef hook. We then absolutely divide the width and height by the current value from the size slider (which specifies how many pixels wide should each grid cell's side be) to get the respective number of columns and rows. These values are recomputed on every window resize and on each change of the size parameter.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### use-gesture usage
 
-### Deployment
+use-gesture's useDrag hook is used to make individual grid cells switch from between being passages and being walls when clicked, or be movable if they are the start cell or the target cell. I chose to use the useDrag hook instead of the built-in events like `click` or `mouseover`, mainly because browsers check for them at a set rate of once per a couple of milliseconds. This means that if we wanted to quickly move the cursor over multiple cells, only some of them would actually react to the `mouseover` event since, for most of them, the cursor was over them in between the browser's 'checks'. All of that made interacting with the grid feel very laggy.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+On the other hand, with the use of the useDrag hook, we can very easily have our function be rerun on even the slightest mouse movement with new cursor coordinates. In this case, at the start of the drag event, we check whether the initial cell we clicked was a passage or a wall and store that information in state until the end of the event. Then on each mouse move, using the new mouse coordinates, we calculate the exact cell index at which our cursor is currently positioned and switch that cell to being a wall if the initial clicked cell was a passage or to being a passage if the initial cell was a wall. We specify the behavior for dragging the start and target cells in a similar way (check the `useAlgo`'s `bind` and `bindSpecial` functions in `hooks` directory for code).
 
-### `npm run build` fails to minify
+## Inspiration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-   [Pathfinding Visualizer](https://clementmihailescu.github.io/Pathfinding-Visualizer/)
+
+This site was a major inspiration for this project, as well as a place from which I got ideas for many of the features present. My main goal was to build on this by making the grid resizable and responsive, making the visualization speed changeable mid-visualization, making manually creating walls smoother, and including the maze generation algorithms.
+
+Also, I want to specify, that this project is not based on any tutorials (I know that the creator of the first site made one, but I didn't want to watch it) and so all of the code, as well as the solutions to all of the problems, are original and I want to take credit for them. I'm saying that, because I don't want anyone to think that I simply ripped off someone's code - I know that the project idea is not totally original, but I assure everyone that this is my own, honest take on it.
+
+## Appendix
+
+I'm aware that opening devtools doesn't cause the grid to automatically resize for some reason, but if that happens, simply slightly changing the size via the slider fixes everything.
+
+If anyone wants to make the grid even larger and is patient enough to bear the lag - you can zoom out the page and then make a change to the size slider or reload the page. If you do this, I recommend immediately clicking the skip button after starting the visualization.
+
+Source for the maze algorithms' info text - [Wikipedia](https://en.wikipedia.org/wiki/Maze_generation_algorithm)
+
+Source for the path algorithms' info text - [Medium](https://medium.com/omarelgabrys-blog/path-finding-algorithms-f65a8902eb40)
+
+## Author
+
+-   [Jakub Koper](https://github.com/copperhuh)
+
+## Feedback
+
+If you have any feedback, please reach out to me at jakub.koper@wpc-huh.com
